@@ -1,0 +1,8 @@
+#+TITLE: Section 3: React Basics and Working With Components
+
+* Module Introduction
+
+We will learn how to use everything that makes up React
+- React Core Syntax & JSX
+- Work with components
+- Work with data
