@@ -16,4 +16,12 @@ We will learn how to use everything that makes up React
 
 - All user interfaces in the end are made up of components
 
-./img-for-notes/img1.png
+[[../S3_React_Basics_and_Components/img-for-notes/img1.png]]
+
+- in this picture, these components are the same; they are just reused twice
+- *components* _are reusable building blocks in your user interface_
+  - though you don't have to reuse components
+- components are made up of HTML for text, CSS for styling, and possibly JS for logic
+- React embraces the concept of components because of
+  1. Resusablility - not repeating yourself
+  2. Separation of concerns - keeping code base small and manageable. Don't do too many things in one and the same place
