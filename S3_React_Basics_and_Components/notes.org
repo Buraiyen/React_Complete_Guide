@@ -16,4 +16,4 @@ We will learn how to use everything that makes up React
 
 - All user interfaces in the end are made up of components
 
-./img-for-notes/img1.jpg
+./img-for-notes/img1.png
