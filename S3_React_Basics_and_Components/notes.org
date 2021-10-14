@@ -6,3 +6,14 @@ We will learn how to use everything that makes up React
 - React Core Syntax & JSX
 - Work with components
 - Work with data
+
+* 1. What Are Components? And Why is React All About them?
+
+- React is a JavaScript library for building user interfaces
+- HTML/CSS/JS are about building user interfaces as well
+- We use libraries like React _to simplify building user interfaces_
+  + This is through the use of *components*
+
+- All user interfaces in the end are made up of components
+
+./img-for-notes/img1.jpg
