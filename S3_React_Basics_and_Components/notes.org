@@ -25,3 +25,15 @@ We will learn how to use everything that makes up React
 - React embraces the concept of components because of
   1. Resusablility - not repeating yourself
   2. Separation of concerns - keeping code base small and manageable. Don't do too many things in one and the same place
+
+* 2. React Code is Written in a "Declarative Way"
+
+** How exactly is a component built?
+- in the end, components are built with HTML, CSS, and JS, then we combine the components to build a user interface
+- mostly, they're about HTML and JS; CSS could be a factor but it's not too important
+
+** The Declarative Approach
+- React allows you to create *reusable and reactive components* consisting of *HTML and JavaScript* (and CSS)
+- React is built using the *declarative approach*, which means that you should not tell React that a certain HTML element should be created and inserted in a specific place on the UI
+  - instead, you will always define the desired target state(s) and let React figure out the actual JavaScript DOM instructions
+- in the end, _we are essentially building our own custom HTML elements_
