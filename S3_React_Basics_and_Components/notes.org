@@ -37,3 +37,39 @@ We will learn how to use everything that makes up React
 - React is built using the *declarative approach*, which means that you should not tell React that a certain HTML element should be created and inserted in a specific place on the UI
   - instead, you will always define the desired target state(s) and let React figure out the actual JavaScript DOM instructions
 - in the end, _we are essentially building our own custom HTML elements_
+
+* 3. Creating a New Project
+** Preface
+- the easiest way to create a React app is through this GitHub Repo
+  - https://github.com/facebook/create-react-app
+- this has preconfigured folders with basic React code files
+- the ~create-react-app~ tool creates a development environment for our app
+
+- You can also visit this site to view the documentation:
+  - https://reactjs.org/
+
+- Make sure you have Node JS installed on your machine
+
+** Creating the Project / Starting the Dev Server
+Run these commands in your terminal:
+
+#+begin_src
+npx create-react-app react-complete-guide
+cd my-app
+npm start
+#+end_src
+
+After the project is created, ~cd~ into the project and run ~npm start~. The application will automatically load up a preview of our app on ~localhost:3000~
+
+** The Application
+You should see something like this in your application:
+
+[[../S3_React_Basics_and_Components/img-for-notes/img2.png]]
+
+These files might change overtime, but just know that you should have a ~src~ folder and a ~package.json~ file. You should also delete all files in the ~src~ folder except for the following:
+
+- App.js
+- index.css
+- index.js
+
+Inside each of these files, replace their code [[https://github.com/academind/react-complete-guide-code/tree/03-react-basics-working-with-components/code/01-starting-setup/src][with the ones on this repo]]
