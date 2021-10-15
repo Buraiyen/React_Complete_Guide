@@ -234,3 +234,26 @@ export default App;
 #+end_src
 
 [[../S3_React_Basics_and_Components/img-for-notes/img7.png]]
+
+* Writing More Complex JSX Code
+
+- let's tweak the HTML code in the ~ExpenseItem()~ function
+- what if we want to add a title, amount, and the date?
+- we can only have 1 root element inside of our function
+- if we need multiple HTML elements in our function, then we need to surround them inside parentheses
+
+#+begin_src javascript
+const ExpenseItem = () => {
+	return (
+		<div>
+			<div>Date</div>
+			<div>
+				<h2>Title</h2>
+				<div>Amount</div>
+			</div>
+		</div>
+	);
+};
+
+export default ExpenseItem;
+#+end_src
