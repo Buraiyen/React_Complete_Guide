@@ -145,3 +145,32 @@ This is what it looks like in the ~index.html~ file
     <div id="root"></div>
     ...
 #+end_src
+
+* Introducing JSX
+
+- JSX stands for /JavaScript XML/
+- the ~npm start~ command transforms our React code into browser-friendly code. This is what it looks like in the browser:
+
+[[../S3_React_Basics_and_Components/img-for-notes/img5.png]]
+
+- inside of the ~main.chunk.js~ file, we see a function called ~App~
+
+  #+begin_src javascript
+function App() {
+  return /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+    children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("h2", {
+      children: "Let's get started!"
+    }, void 0, false, {
+      fileName: _jsxFileName,
+      lineNumber: 4,
+      columnNumber: 7
+    }, this)
+  }, void 0, false, {
+    fileName: _jsxFileName,
+    lineNumber: 3,
+    columnNumber: 5
+  }, this);
+}
+  #+end_src
+
+- this is the transformed code that runs in the browser
