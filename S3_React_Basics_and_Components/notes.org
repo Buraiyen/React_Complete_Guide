@@ -174,3 +174,21 @@ function App() {
   #+end_src
 
 - this is the transformed code that runs in the browser
+
+* How React Works
+
+#+begin_src javascript
+function App() {
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- we have HTML code inside of ~App()~
+- we can build our custom HTML elements with React
+- if we make changes to our JSX code while the development server is running, then those changes will automatically update in the browser
