@@ -8,7 +8,7 @@ We will learn how to use everything that makes up React
 - Work with components
 - Work with data
 
-* 1. What Are Components? And Why is React All About them?
+* What Are Components? And Why is React All About them?
 
 - React is a JavaScript library for building user interfaces
 - HTML/CSS/JS are about building user interfaces as well
@@ -27,7 +27,7 @@ We will learn how to use everything that makes up React
   1. Resusablility - not repeating yourself
   2. Separation of concerns - keeping code base small and manageable. Don't do too many things in one and the same place
 
-* 2. React Code is Written in a "Declarative Way"
+* React Code is Written in a "Declarative Way"
 
 ** How exactly is a component built?
 - in the end, components are built with HTML, CSS, and JS, then we combine the components to build a user interface
@@ -39,7 +39,7 @@ We will learn how to use everything that makes up React
   - instead, you will always define the desired target state(s) and let React figure out the actual JavaScript DOM instructions
 - in the end, _we are essentially building our own custom HTML elements_
 
-* 3. Creating a New Project
+* Creating a New Project
 ** Preface
 - the easiest way to create a React app is through this GitHub Repo
   - https://github.com/facebook/create-react-app
@@ -75,7 +75,7 @@ These files might change overtime, but just know that you should have a ~src~ fo
 
 Inside each of these files, replace their code [[https://github.com/academind/react-complete-guide-code/tree/03-react-basics-working-with-components/code/01-starting-setup/src][with the ones on this repo]]. The reason is that this version is the original one that is created with ~create-react-app~. Just to be sure that the packages are updated, run ~npm i~ in your terminal.
 
-* 3. Analyzing a Standard React Project
+* Analyzing a Standard React Project
 
 Let's have a look at the ~src~ folder because that is where we will spend the majority of our time
 
@@ -84,6 +84,7 @@ Let's have a look at the ~src~ folder because that is where we will spend the ma
 - the most important takeaway: /React code is just JavaScript code/
 
 ** ~index.js~
+*** General Overview
 - let's start with the ~index.js~ file
 
 #+begin_src javascript
@@ -99,11 +100,48 @@ ReactDOM.render(<App />, document.getElementById("root"));
 - we will write code that's easy to read and has syntactic sugar, but this kind would actually run in the browser
 - the ~npm start~ command will take our code and transform it before it is delivered to the browser
   - an example is ~import "./index.css"~, because that's not actual JavaScript. You can't import CSS into JS
-
 - another example of invalid JS is ~<App />~
 
-** The React DOM
+*** The React DOM
 - in this file, we are importing /ReactDOM/ from ~react-dom~
 - also, in the ~package.json~ file, you would see two dependencies: ~react~ and ~react-dom~
 
 [[../S3_React_Basics_and_Components/img-for-notes/img4.png]]
+
+- while technically these are two separate packages, these incompass the React library
+
+*** The ~render~ Method
+#+begin_src javascript
+ReactDOM.render(<App />, document.getElementById("root"));
+#+end_src
+- the ~render~ method takes two arguments
+
+**** The App Component
+
+The ~App~ component is the main component that encompasses all other components
+
+#+begin_src javascript
+function App() {
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+In this, we are returning HTML code inside of a JavaScript file. This is a feature called *JSX*
+
+**** The ~root~ Element DOM API
+
+the default JavaScript DOM API. It calls the ~root~ ID inside of the /public/index.html/ file, which is the actual file that's is used to display our React code
+
+This is what it looks like in the ~index.html~ file
+#+begin_src html
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    ...
+#+end_src
