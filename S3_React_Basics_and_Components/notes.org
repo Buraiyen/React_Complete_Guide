@@ -1,4 +1,5 @@
 #+TITLE: Section 3: React Basics and Working With Components
+#+AUTHOR: Brian E. Nguyen
 
 * Module Introduction
 
@@ -73,3 +74,36 @@ These files might change overtime, but just know that you should have a ~src~ fo
 - index.js
 
 Inside each of these files, replace their code [[https://github.com/academind/react-complete-guide-code/tree/03-react-basics-working-with-components/code/01-starting-setup/src][with the ones on this repo]]. The reason is that this version is the original one that is created with ~create-react-app~. Just to be sure that the packages are updated, run ~npm i~ in your terminal.
+
+* 3. Analyzing a Standard React Project
+
+Let's have a look at the ~src~ folder because that is where we will spend the majority of our time
+
+[[../S3_React_Basics_and_Components/img-for-notes/img3.png]]
+
+- the most important takeaway: /React code is just JavaScript code/
+
+** ~index.js~
+- let's start with the ~index.js~ file
+
+#+begin_src javascript
+import ReactDOM from "react-dom";
+
+import "./index.css";
+import App from "./App";
+
+ReactDOM.render(<App />, document.getElementById("root"));
+#+end_src
+
+- this file is the first one that is executed whenever the page is loaded
+- we will write code that's easy to read and has syntactic sugar, but this kind would actually run in the browser
+- the ~npm start~ command will take our code and transform it before it is delivered to the browser
+  - an example is ~import "./index.css"~, because that's not actual JavaScript. You can't import CSS into JS
+
+- another example of invalid JS is ~<App />~
+
+** The React DOM
+- in this file, we are importing /ReactDOM/ from ~react-dom~
+- also, in the ~package.json~ file, you would see two dependencies: ~react~ and ~react-dom~
+
+[[../S3_React_Basics_and_Components/img-for-notes/img4.png]]
