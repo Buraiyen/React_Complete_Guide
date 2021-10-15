@@ -192,3 +192,45 @@ export default App;
 - we have HTML code inside of ~App()~
 - we can build our custom HTML elements with React
 - if we make changes to our JSX code while the development server is running, then those changes will automatically update in the browser
+
+* Building a First Custom Component
+
+- it is best practice to put components into their own files, so you have one file per component
+- React projects have dozens and hundreds of components in the end, /and that's completely normal/
+- inside of the /src/ folder, let's create a /components/ folder to hold our components source files
+  + we don't put ~App.js~ inside of it because it's a special type of component
+- in the end, we are building a component tree
+
+[[../S3_React_Basics_and_Components/img-for-notes/img6.png]]
+
+1. let's add a new file inside of /components/ folder called ~ExpenseItem.js~
+   + it's a React convention to name files starting with a capital character, and every sub-word starts with a captial letter
+   + keep in mind that _a React component is just a JavaScript function_
+2. lets's write our ~ExpenseItem()~ function in our ~ExpenseItem.js~
+
+#+begin_src javascript
+const ExpenseItem = () => {
+  return <h2>Expense Item!</h2>;
+};
+
+export default ExpenseItem;
+#+end_src
+
+3. after we are done with our function, we need to write an export statement
+4. we will then import that component in ~App.js~ and use it
+
+#+begin_src javascript
+import ExpenseItem from "./components/ExpenseItem";
+
+function App() {
+	return (
+		<div>
+			<h2>Let's get started!</h2>
+			<ExpenseItem></ExpenseItem>
+		</div>
+	);
+}
+export default App;
+#+end_src
+
+[[../S3_React_Basics_and_Components/img-for-notes/img7.png]]
