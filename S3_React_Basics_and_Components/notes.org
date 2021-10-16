@@ -368,3 +368,11 @@ export default ExpenseItem;
 #+end_src
 
 [[../S3_React_Basics_and_Components/img-for-notes/img9.png]]
+
+
+* Passing Data via "Props"
+
+- how can we make the ~ExpenseItem~ component reusable?
+  + in ~App.js~ we can just copy the component multiple times, but they all output the same data
+- let's create data outside of our ~ExpenseItem~ component
+  + [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/expenses.txt][insert this data inside of your ~App.js~ component]]
