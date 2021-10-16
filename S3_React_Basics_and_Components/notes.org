@@ -257,3 +257,55 @@ const ExpenseItem = () => {
 
 export default ExpenseItem;
 #+end_src
+
+* Adding Basic Styling
+
+- we still use CSS for styling, but there's nothing "React-specific" about it
+- to add CSS to a component, we would first need to create a CSS file that has the same name as the component
+  + in this case, it would be ~ExpenseItem.css~
+- [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/ExpenseItem.css][the code is provided at this link]]
+- back in ~ExpenseItem.js~, we will import the CSS
+
+  #+begin_src javascript
+// ExpenseItem.js
+import "./ExpenseItem.css";
+
+const ExpenseItem = () => {
+	return (
+		<div>
+			<div>Date</div>
+			<div>
+				<h2>Title</h2>
+				<div>Amount</div>
+			</div>
+		</div>
+	);
+};
+
+export default ExpenseItem;
+
+#+end_src
+
+- when we work with adding classes to elements, /we don't use/ ~class~, /but rather/ ~className~
+- it's strange, but keep in mind that the code inside of our function is not really HTML
+  + this is JSX syntax invented by the React team
+  + under the hood, it's still JavaScript code
+- let's add the classes to the JSX code
+
+#+begin_src javascript
+import "./ExpenseItem.css";
+const ExpenseItem = () => {
+	return (
+		<div className='expense-item'>
+			<div>March 28th 2021</div>
+			<div className='expense-item__description'>
+				<h2>Car Insurance</h2>
+				<div className='expense-item__price'>$297.48</div>
+			</div>
+		</div>
+	);
+};
+export default ExpenseItem;
+#+end_src
+
+[[../S3_React_Basics_and_Components/img-for-notes/img8.png]]
