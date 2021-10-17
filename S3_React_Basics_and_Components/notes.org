@@ -505,3 +505,41 @@ const ExpenseItem = (props) => {
 
 export default ExpenseItem;
 #+end_src
+
+[[../S3_React_Basics_and_Components/img-for-notes/img10.png]]
+
+* Adding "normal" JavaScript Logic to Components
+
+- we will fix the JSX code so that the app is more human-readable
+- we have our date object. If we just want to output specific parts of the date, then we can use the ~.toLocaleString()~, which helps with outputting the date in readable format
+  + this methods takes in 2 parameters
+    1. location
+    2. the format of the date
+
+#+begin_src javascript
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  const month = props.date.toLocaleString("en-US", { month: "long" });
+  const day = props.date.toLocaleString("en-US", { day: "2-digit" });
+  const year = props.date.getFullYear();
+
+  return (
+    <div className='expense-item'>
+      <div>
+        <div>{month}</div>
+        <div>{day}</div>
+        <div>{year}</div>
+      </div>
+      <div className='expense-item__description'>
+        <h2>{props.title}</h2>
+        <div className='expense-item__price'>${props.amount}</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- /tip:/ it's good practice to do data extraction before you place them inside the JSX code
