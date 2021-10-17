@@ -375,4 +375,133 @@ export default ExpenseItem;
 - how can we make the ~ExpenseItem~ component reusable?
   + in ~App.js~ we can just copy the component multiple times, but they all output the same data
 - let's create data outside of our ~ExpenseItem~ component
-  + [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/expenses.txt][insert this data inside of your ~App.js~ component]]
+  + [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/expenses.txt][insert this data inside of your ~App.js~ component]]i
+
+#+begin_src javascript
+// App.js
+import ExpenseItem from "./components/ExpenseItem";
+
+function App() {
+  const expenses = [
+    {
+      id: "e1",
+      title: "Toilet Paper",
+      amount: 94.12,
+      date: new Date(2020, 7, 14),
+    },
+    { id: "e2", title: "New TV", amount: 799.49, date: new Date(2021, 2, 12) },
+    {
+      id: "e3",
+      title: "Car Insurance",
+      amount: 294.67,
+      date: new Date(2021, 2, 28),
+    },
+    {
+      id: "e4",
+      title: "New Desk (Wooden)",
+      amount: 450,
+      date: new Date(2021, 5, 12),
+    },
+  ];
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+      <ExpenseItem></ExpenseItem>
+      <ExpenseItem></ExpenseItem>
+      <ExpenseItem></ExpenseItem>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- we can pass in custom attributes in our components
+- we can also pass in more than 1 attribute to a component
+
+#+begin_src javascript
+import ExpenseItem from "./components/ExpenseItem";
+
+function App() {
+  const expenses = [
+    {
+      id: "e1",
+      title: "Toilet Paper",
+      amount: 94.12,
+      date: new Date(2020, 7, 14),
+    },
+    { id: "e2", title: "New TV", amount: 799.49, date: new Date(2021, 2, 12) },
+    {
+      id: "e3",
+      title: "Car Insurance",
+      amount: 294.67,
+      date: new Date(2021, 2, 28),
+    },
+    {
+      id: "e4",
+      title: "New Desk (Wooden)",
+      amount: 450,
+      date: new Date(2021, 5, 12),
+    },
+  ];
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+      <ExpenseItem
+        title={expenses[0].title}
+        amount={expenses[0].amount}
+        date={expenses[0].date}
+      ></ExpenseItem>
+      <ExpenseItem
+        title={expenses[1].title}
+        amount={expenses[1].amount}
+        date={expenses[1].date}
+      ></ExpenseItem>
+      <ExpenseItem
+        title={expenses[2].title}
+        amount={expenses[2].amount}
+        date={expenses[2].date}
+      ></ExpenseItem>
+      <ExpenseItem
+        title={expenses[3].title}
+        amount={expenses[3].amount}
+        date={expenses[3].date}
+      ></ExpenseItem>
+    </div>
+  );
+}
+
+export default App;
+
+#+end_src
+
+- now we need to output the data inside ~ExpenseItem.js~ because it's still showing the hardcoded data
+- we would need to pass in the data as a parameter in the function
+- you would think the function would look like this:
+
+#+begin_src javascript
+const ExpenseItem = (title, amount, date) => {
+...
+}
+#+end_src
+
+- but in reality, we don't do this. We only pass in one parameter, and you can name this whatever you want. Typically, it would be named ~props~ to make it clear that this is the object that holds our data
+  + the keys are the names of the attributes that we pass in, and the values use the values' names
+#+begin_src javascript
+// ExpenseItem.js
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <div className='expense-item'>
+      <div>{props.date.toISOString()}</div>
+      <div className='expense-item__description'>
+        <h2>{props.title}</h2>
+        <div className='expense-item__price'>${props.amount}</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
