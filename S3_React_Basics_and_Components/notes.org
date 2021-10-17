@@ -543,3 +543,58 @@ export default ExpenseItem;
 #+end_src
 
 - /tip:/ it's good practice to do data extraction before you place them inside the JSX code
+
+* Splitting Components into Multiple Components
+
+- as you work on your React components, the components will become bigger and bigger, which is natural
+- React allows you to split your application into smaller building blocks with components
+- we can treat the date display JSX as its own separate component; there is no hard rule to determine what can be a component and what couldn't
+- let's create a new component called ~ExpenseDate.js~ and take the date stuff and put it into this new component
+
+#+begin_src javascript
+// ExpenseDate.js
+const ExpenseDate = (props) => {
+  const month = props.date.toLocaleString("en-US", { month: "long" });
+  const day = props.date.toLocaleString("en-US", { day: "2-digit" });
+  const year = props.date.getFullYear();
+
+  return (
+    <div>
+      <div>{month}</div>
+      <div>{day}</div>
+      <div>{year}</div>
+    </div>
+  );
+};
+
+export default ExpenseDate;
+#+end_src
+
+- when we use our custom components, if there is no content between the opening and closing tags, then we can write our components in this format:
+
+#+begin_src html
+<ExpenseDate />
+#+end_src
+
+- now we need to pass in props for our ~ExpenseDate~ component
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <div className='expense-item'>
+      <ExpenseDate date={props.date}/>
+      <div className='expense-item__description'>
+        <h2>{props.title}</h2>
+        <div className='expense-item__price'>${props.amount}</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- let's add some styling with an ExpenseDate.css file [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/ExpenseDate.css][using the code from this link]]
