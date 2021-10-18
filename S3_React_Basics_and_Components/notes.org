@@ -817,3 +817,16 @@ export default Expenses;
   2. an object that sets the attributes of the element
   3. the content between the opening and closing tags. You can have infinite arguments after that for any content
 - this is the under-the-hood code that gets created
+
+* Organizing Component Files
+
+- right now our /components/ folder is messy
+
+[[../S3_React_Basics_and_Components/img-for-notes/img14.png]]
+
+- we can create folders based on the components' purpose. We will create folders called /UI/ and /Expenses/, and then move our files into there
+- we would also need to update the paths for the files too
+
+** File Paths
+- ~./~ means you are referencing a file in the same directory as the current file
+- ~../~ means you are referencing a file outside of the current directory
