@@ -640,12 +640,10 @@ export default App;
 #+begin_src javascript
 // Expenses.js
 import ExpenseItem from "./ExpenseItem";
-
+import "./Expenses.css";
 const Expenses = (props) => {
   return (
-    <div>
-      <h2>Let's get started!</h2>
-
+    <div className='expenses'>
       {props.expenses.map(function (obj, i) {
         return (
           <ExpenseItem
@@ -661,3 +659,125 @@ const Expenses = (props) => {
 
 export default Expenses;
 #+end_src
+
+* The Concept of "Composition" ("children props")
+
+- *composition* - building a user interface from smaller building blocks
+- what if we wanted to have a component that doesn't involve using props; rather, we can pass in content between the open and closing element brackets?
+
+[[../S3_React_Basics_and_Components/img-for-notes/img11.png]]
+
+- we can extract the rounded corners and the drop shadows styles that are used for the ~ExpenseItem~ and ~Expenses~ components, into a separate component
+- let's name the component ~Card~ and create a CSS file for it
+  + generally in web dev, a /card/ refers to a container
+
+#+begin_src javascript
+import "./Card.css";
+
+const Card = () => {
+  return <div className="card"></div>;
+};
+
+export default Card;
+#+end_src
+
+- inside of ~Expenses.css~, we will extract the ~border-radius~ and ~box-shadow~ styles from the ~.expenses~ class
+  + we will then put those styles inside of ~Card.css~ in a new class called ~.card~
+
+#+begin_src css
+/* Card.css */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+}
+#+end_src
+
+- we also want to go to ~ExpenseItem.css~ and remove the ~box-shadow~ and ~border-radius~ styles
+- now inside of our ~ExpenseItem.js~, we will import ~Card~ and replace the root ~<div>~ tag with it
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import Card from "./Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- now having content between the tags /doesn't work just yet/
+- in ~Card.js~, we want to accept props. We will use a special kind of prop that is used inside every component
+  + this is called ~props.children~. This is all of the content that is between the opening and closing tags
+
+#+begin_src javascript
+import "./Card.css";
+
+const Card = (props) => {
+  return <div className="card">{props.children}</div>;
+};
+
+export default Card;
+#+end_src
+
+- we got some content back, but it's also a bit broken
+
+[[../S3_React_Basics_and_Components/img-for-notes/img12.png]]
+
+- the reason is that some styles are missing. We would want to tweak the code in the ~Card~ component
+
+#+begin_src javascript
+import "./Card.css";
+
+const Card = (props) => {
+  const classes = "card " + props.className;
+  return <div className={classes}>{props.children}</div>;
+};
+
+export default Card;
+#+end_src
+
+- we added a new constant called ~classes~ so that any class received from outside will be added to the "card " string
+  + /note:/ ~props.className~ has the value of ~expense-item~
+- we can also use our ~Card~ component inside of ~Expenses~
+
+#+begin_src javascript
+import ExpenseItem from "./ExpenseItem";
+import Card from "./Card";
+import "./Expenses.css";
+
+const Expenses = (props) => {
+  return (
+    <Card className="expenses">
+      {props.expenses.map(function (obj, i) {
+        return (
+          <ExpenseItem
+            title={props.expenses[i].title}
+            amount={props.expenses[i].amount}
+            date={props.expenses[i].date}
+          />
+        );
+      })}
+    </Card>
+  );
+};
+
+export default Expenses;
+#+end_src
+
+
+[[../S3_React_Basics_and_Components/img-for-notes/img13.png]]
+
+- what's the purpose of doing all of this?
+  + we were able to extract some code duplication
+  + there will be more complex wrappers later in the course
+  + this helps with composition
