@@ -369,7 +369,6 @@ export default ExpenseItem;
 
 [[../S3_React_Basics_and_Components/img-for-notes/img9.png]]
 
-
 * Passing Data via "Props"
 
 - how can we make the ~ExpenseItem~ component reusable?
@@ -781,3 +780,40 @@ export default Expenses;
   + we were able to extract some code duplication
   + there will be more complex wrappers later in the course
   + this helps with composition
+
+* A First Summary
+
+- you build user interfaces by combining components
+- we split our code through multiple building blocks
+- we are also able to pass in props to our components
+
+* A Closer Look at JSX
+
+- the JSX code that is then transformed into code that the browser can read is unreadable for humans
+- we have two dependencies inside ~package.json~: ~react~ and ~react-dom~
+- we use ~react-dom~ inside of ~index.js~, but we never use ~react~ anywhere
+  + this is because in older versions of React, you would need to import ~react~ in every file where you use JSX
+
+#+begin_src html
+<div>
+    <h2>Let's get started!</h2>
+    <Expenses expenses={expenses} />
+ </div>
+#+end_src
+
+- let's take this JSX code and see what it looks like in plain JavaScript
+
+#+begin_src javascript
+ return React.createElement(
+    "div",
+    {},
+    React.createElement("h2", {}, "Let's get started!"),
+    React.createElement(Expenses, { expenses: expenses })
+  );
+#+end_src
+
+- this ~createElement~ method takes in three arguments:
+  1. the HTML element to be created
+  2. an object that sets the attributes of the element
+  3. the content between the opening and closing tags. You can have infinite arguments after that for any content
+- this is the under-the-hood code that gets created
