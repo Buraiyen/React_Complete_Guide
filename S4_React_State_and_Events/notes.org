@@ -1,0 +1,9 @@
+#+TITLE: Section 4: React State & Working with Events
+#+AUTHOR: Brian E. Nguyen
+
+* Module Introduction
+In this module, we will take a closer look at the following
+- user interaction
+  - this includes events like click, inputs, etc.
+- state management
+  - so far we can only build static applications where the state never changes, and that's not what we want
