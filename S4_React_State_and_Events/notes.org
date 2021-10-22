@@ -7,3 +7,37 @@ In this module, we will take a closer look at the following
   - this includes events like click, inputs, etc.
 - state management
   - so far we can only build static applications where the state never changes, and that's not what we want
+
+* Listening to Events & Working With Event Handlers
+
+- we only have one state in our application, which is the inital state
+- let's start with clicks on a button which you want something to happen
+- in the ~ExpenseItem~ component, let's add a button tag
+  - this will be a temporary button with no styles so that we can practice with React states
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- the goal of this button is to change the title when the button is clicked
+- React has a simple way of detecting button clicks
+- on all built-in HTML elements, we have full access to native DOM events which we can listen to
+- we will add a special prop in JSX called ~on~. This can be followed by ~onClick~, etc.
+  - from there, we can add JavaScript logic to it
