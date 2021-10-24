@@ -133,3 +133,67 @@ export default ExpenseItem;
 - *the main point:* by using components like HTML elements, we make React aware of these component functions. When React evaluates the JSX, it will call the component functions
   + then the component functions will call any component functions inside of them. This process will repeat itself until there is no more JSX
 - now, we need a way to tell React to reevaluate these component functions when we execute a handler
+
+* Working with 'State'
+
+- /state/ is not a React-specific concept
+- we need to trigger a re-evaluation so that we can change our title
+  + note that variables, like ~title~ are not triggered in the re-evaluation
+  + React doesn't care about that. The component function doesn't get re-evaluated just because a variable changed
+- to tell React that the component function should run again, we need to import something from the React library called ~useState~
+  + this is a function provided by the React library which allows us to define values as state, where changes to these values should reflect in the component function
+
+#+begin_src javascript
+import React, { useState } from 'react';
+#+end_src
+
+- /inside/ of our component function, we just call ~useState~ to use it
+- /tip:/ hook functions start with /use/ and can only be called inside component functions, but not inside nested functions
+- with ~useState~, it wants a default-state value. We can assign an initial variable of ~props.title~ and pass it as an argument inside ~useState~
+
+#+begin_src javascript
+// ExpenseItem.js
+import React, { useState } from "react";
+
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  useState(props.title);
+
+  let title = props.title;
+
+  const clickHandler = () => {
+    title = "Updated!";
+  };
+  return
+...
+}
+#+end_src
+
+- ~useState~ not only lets us use the special variable in other places, but it also returns a function that we can call to assign a new value to that variable
+  + ~useState~ returns an array where it has two values inside of it:
+    1. the variable itself
+    2. the updating function
+  + you can use array-destructuring to retrieve these values
+
+#+begin_src javascript
+const [title, setTitle] = useState(props.title)
+#+end_src
+
+- this is now what the updated function looks like with ~setTitle~ in use
+
+#+begin_src javascript
+const ExpenseItem = (props) => {
+  const [title, setTitle] = useState(props.title);
+
+  const clickHandler = () => {
+    setTitle("Updated!");
+  };
+  ...
+}
+#+end_src
+
+- note that the ~setTitle~ function doesn't only assign the new value to a new variable, but it is also managed by React somewhere in memory because it's a special variable
+- now when we click on a button, the title now updates it
