@@ -197,3 +197,119 @@ const ExpenseItem = (props) => {
 
 - note that the ~setTitle~ function doesn't only assign the new value to a new variable, but it is also managed by React somewhere in memory because it's a special variable
 - now when we click on a button, the title now updates it
+
+[[../S4_React_State_and_Events/img-for-notes/img1.png]]
+
+* A Closer Look at the "useState" Hook
+
+** Per-Component Basis
+
+- ~useState~ registers some value as a state for the component in which it is being called
+  + to be more precise, it registers it for a specific component instance
+- in our ~Expenses~ component, our ~ExpenseItem~ component is used four times
+
+#+begin_src javascript
+// Expenses.js
+
+// Note that the props passed in have 4 objects
+const Expenses = (props) => {
+  return (
+    <Card className="expenses">
+      {props.expenses.map(function (obj, i) {
+        return (
+          <ExpenseItem
+            title={props.expenses[i].title}
+            amount={props.expenses[i].amount}
+            date={props.expenses[i].date}
+          />
+        );
+      })}
+    </Card>
+  );
+};
+#+end_src
+
+- the ~useState~ function is called 4 times when we create the 4 ~ExpenseItem~ components, and each are managed independently by React
+  + that is why when we click on a button and title changes, the rest of the titles don't change, because they have their own state
+- if we put a ~console.log()~ in our component, when we load up a page, this code will run 4 times; however, when we click on a button, it only runs once
+
+#+begin_src javascript
+// ExpenseItem.js
+ const ExpenseItem = (props) => {
+  const [title, setTitle] = useState(props.title);
+  console.log("Component evaluated by React");
+  const clickHandler = () => {
+    setTitle("Updated!");
+    console.log(title);
+  };
+  ...
+#+end_src
+
+[[../S4_React_State_and_Events/img-for-notes/img2.png]]
+
+- the takeaway is that /state is separated on a per-component basis/
+
+** Using ~const~?
+
+- why are we using ~const~ at the array-destructuring part when we eventually assign it a new value?
+- note that we are not assigning a value with the = sign when we update the state
+- instead, we call the state-updating function, and the value is managed somewhere else in React
+- we never assign the value of ~title~ with the = operator; therefore, using ~const~ is fine
+
+** Closing Mentions
+
+- knowing state is important, because in more complex apps, there could be times when a value doesn't update when it should
+- using state is simple.
+  1. You just register state with ~useState~,
+  2. you always get two values,
+  3. you call the updating function, and
+  4. you use the first value for outputs in JSX code
+
+* State Can Be Updated in Many Ways
+
+Thus far, we update our state *upon user events*, (e.g. upon a click). That's very common but not required for state updates. *You can update states for whatever reason you many have.
+
+Later in the course, we'll see HTTP requests where we want to update the state based on the HTTP response, but you could also be updating state because a timer (set with ~setTimeout()~) expired for example
+
+* Adding Form Inputs
+
+- on thing that is missing from our app is getting user input
+- we will add new components and a new category of components.
+  + We will call this folder ~NewExpense~
+  + inside of the folder, we will add a new component called ~NewExpense~ where it will render a form for users to input information, as well as its styles
+    - [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/NewExpense.css][click here to access the CSS code for NewExpense]]
+
+- we will also take the form and put it into a separate component so that the form logic is in it's own component. This will be called ~ExpenseForm.js~
+  + [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/ExpenseForm.css][click here for the ExpenseForm CSS code]]
+
+#+begin_src javascript
+// ExpenseForm.js
+import "./ExpenseForm.css";
+const ExpenseForm = () => {
+  return (
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__controls">
+          <label>Title</label>
+          <input type="text" />
+        </div>
+        <div className="new-expense__controls">
+          <label>Amount</label>
+          <input type="number" min="0.01" step="0.01" />
+        </div>
+        <div className="new-expense__controls">
+          <label>Date</label>
+          <input type="date" min="2019-01-01" max="2021-12-31" />
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+};
+
+export default ExpenseForm;
+#+end_src
+
+- we will add event listeners to this form soon
