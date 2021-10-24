@@ -337,3 +337,59 @@ export default NewExpense;
 [[../S4_React_State_and_Events/img-for-notes/img3.png]]
 
 - in the next lesson, we will figure out how to make the form retrieve input, because it's not doing anything right now
+
+* Listening to User Input
+
+- let's add an ~onChange~ event listener to the user input on ~ExpenseForm.js~
+
+#+begin_src javascript
+import "./ExpenseForm.css";
+const ExpenseForm = () => {
+  const titleChangeHandler = () => {
+    console.log("Title changed!");
+  };
+
+  return (
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__controls">
+          <label>Title</label>
+          <input type="text" onChange={titleChangeHandler} />
+        </div>
+        <div className="new-expense__controls">
+          <label>Amount</label>
+          <input type="number" min="0.01" step="0.01" />
+        </div>
+        <div className="new-expense__controls">
+          <label>Date</label>
+          <input type="date" min="2019-01-01" max="2021-12-31" />
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+};
+
+export default ExpenseForm;
+#+end_src
+
+[[../S4_React_State_and_Events/img-for-notes/img4.png]]
+
+- the title changes for every keystroke. But now we actually want to get the user input
+- we can get the event as an object. This has a lot of data, but the one we're interested in is ~target~ that has a property called ~value~. This holds the value of the user input
+
+[[../S4_React_State_and_Events/img-for-notes/img5.png]]
+
+- we can now use that value for our purposes
+
+#+begin_src javascript
+// ExpenseForm.js
+const ExpenseForm = () => {
+  const titleChangeHandler = (event) => {
+    console.log(event.target.value);
+  };
+#+end_src
+
+[[../S4_React_State_and_Events/img-for-notes/img6.png]]
