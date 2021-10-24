@@ -313,3 +313,27 @@ export default ExpenseForm;
 #+end_src
 
 - we will add event listeners to this form soon
+- now we will import this component to ~NewExpense~
+
+#+begin_src javascript
+// NewExpense.js
+import ExpenseForm from "./ExpenseForm";
+
+import "./NewExpense.css";
+
+const NewExpense = () => {
+  return (
+    <div className="new-expense">
+      <ExpenseForm />
+    </div>
+  );
+};
+
+export default NewExpense;
+#+end_src
+
+- now we want to render the ~NewExpense~ component inside ~App.js~
+
+[[../S4_React_State_and_Events/img-for-notes/img3.png]]
+
+- in the next lesson, we will figure out how to make the form retrieve input, because it's not doing anything right now
