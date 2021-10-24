@@ -92,3 +92,44 @@ export default ExpenseItem;
 
 - when we call the function, we don't add parentheses to it. Why? Because JavaScript will execute the function when the entire JSX line is parsed
 - it's a convention that these functions end with ~Handler~. Not everyone does this, but take note of it
+
+* How Component Functions Are Executed
+
+- reacting to events is an important first step. How can we now change what shows up on the screen?
+- we can add a new variable called ~title~ and pass it into the JSX code.
+- now that we created a variable, we can use the ~clickHandler~ function to let us change the title
+
+#+begin_src javascript
+// ExpenseItem.js
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  let title = props.title;
+
+  const clickHandler = () => {
+    title = "Updated!";
+  };
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button onClick={clickHandler}>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- but if we were to actually click on the button, the title doesn't change. Why is that? The click handler still executed though and the value of ~title~ is "Updated!"
+- the reason is simply because React doesn't work like this. We'll dive deeper into the reason later in the course
+- what you need to know right now is that your component is a function; the only special thing about this function is that it returns JSX code
+- we never explicity call our component functions. We just use them like HTML elements
+- *the main point:* by using components like HTML elements, we make React aware of these component functions. When React evaluates the JSX, it will call the component functions
+  + then the component functions will call any component functions inside of them. This process will repeat itself until there is no more JSX
+- now, we need a way to tell React to reevaluate these component functions when we execute a handler
