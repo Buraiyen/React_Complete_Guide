@@ -16,6 +16,7 @@ In this module, we will take a closer look at the following
   - this will be a temporary button with no styles so that we can practice with React states
 
 #+begin_src javascript
+// Expense Item
 import ExpenseDate from "./ExpenseDate";
 import Card from "../UI/Card";
 import "./ExpenseItem.css";
@@ -41,3 +42,53 @@ export default ExpenseItem;
 - on all built-in HTML elements, we have full access to native DOM events which we can listen to
 - we will add a special prop in JSX called ~on~. This can be followed by ~onClick~, etc.
   - from there, we can add JavaScript logic to it
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button onClick={() => {console.log('Clicked!')}}>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- we typically want to define a function before the ~return~ statement
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  const clickHandler = () => {
+    console.log("Clicked!");
+  };
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button onClick={clickHandler}>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- when we call the function, we don't add parentheses to it. Why? Because JavaScript will execute the function when the entire JSX line is parsed
+- it's a convention that these functions end with ~Handler~. Not everyone does this, but take note of it
