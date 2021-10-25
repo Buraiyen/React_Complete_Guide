@@ -649,3 +649,115 @@ const submitHandler = (event) => {
 - now when we submit the form, we retrieve our data and the form will be cleared
 
 [[../S4_React_State_and_Events/img-for-notes/img8.png]]
+
+* Child-to-Parent Component Communication (Bottom-up)
+
+** Intro
+
+- the problem is that this data is nice, but we don't need it inside of the ~ExpenseForm~ component. Instead, we need it inside ~NewExpense~ or ~App~
+- we need to pass data to the ~App~ component
+- so far we only learned how  to pass data down. Now we need to figure out passing it up
+- we actually saw how it works, but you most likely missed it
+  + in ~ExpenseForm~, we are listening to user input. The change handlers are an example of this
+  + you can think of the attributes in the ~<input>~ tag as an example
+
+** Pass Data from ~ExpenseForm~ to ~NewExpense~
+
+1. let's say we want to pass ~expenseData~ from ~ExpenseForm~ to ~NewExpense~. Props can be only passed from parent to child. As a first step inside of ~NewExpense~, we will add a new prop to ~ExpenseForm~
+   + note that you cannot skip components
+2. We can create our own custom props. Let's call it ~onSaveExpenseData~
+
+#+begin_src javascript
+// NewExpense.js
+import ExpenseForm from "./ExpenseForm";
+
+import "./NewExpense.css";
+
+const NewExpense = () => {
+  return (
+    <div className="new-expense">
+      <ExpenseForm onSaveExpenseData />
+    </div>
+  );
+};
+
+export default NewExpense;
+#+end_src
+
+3. Then we will create a new function that will expect submitted data from the form. From there, we can pass that function to ~onSaveExpenseData~
+
+#+begin_src js
+const NewExpense = () => {
+  const saveExpenseDataHandler = (enteredExpenseData) => {
+    const expenseData = {
+      ...enteredExpenseData,
+      id: Math.random().toString(),
+    };
+  };
+  return (
+    <div className='new-expense'>
+      <ExpenseForm onSaveExpenseData={saveExpenseDataHandler} />
+    </div>
+  );
+};
+#+end_src
+
+4. Now we need to use this function inside of our ~ExpenseForm~ component. We would need to pass in props inside of our component
+5. Inside of our ~submitHandler()~ function, we would need to call ~props.onSaveExpenseData()~ and pass in ~expenseData~
+
+#+begin_src js
+// ExpenseForm.js
+const ExpenseForm = (props) => {
+  ...
+  props.onSaveExpenseData(expenseData);
+  setEnteredTitle('');
+  setEnteredAmount('');
+  setEnteredDate('');
+}
+#+end_src
+
+- now when we submit data, the data is now being logged to ~NewExpense~
+- we can also tell that the data is new because it now has a randomly generated ID
+
+[[../S4_React_State_and_Events/img-for-notes/img9.png]]
+
+** Pass Data from ~NewExpense~ to ~App~
+
+1. create a new function called ~addExpenseHandler~ inside of ~App~A
+
+#+begin_src js
+// App.js
+const addExpenseHandler = (expense) => {
+    console.log(expense);
+  };
+#+end_src
+
+2. create a prop called ~onAddExpense~ to ~NewExpense~ tag and add the function to it
+
+#+begin_src js
+// App.js
+return (
+    <div>
+      <h2>Let's get started!</h2>
+      <NewExpense onAddExpense={addExpenseHandler} />
+      <Expenses expenses={expenses} />
+    </div>
+  );
+#+end_src
+
+3. Allow ~NewExpense~ to accept props and call the function with ~expenseData~ passed into it
+
+#+begin_src js
+// NewExpense.js
+const NewExpense = (props) => {
+  const saveExpenseDataHandler = (enteredExpenseData) => {
+    const expenseData = {
+      ...enteredExpenseData,
+      id: Math.random().toString(),
+    };
+    props.onAddExpense(expenseData);
+  };
+#+end_src
+
+
+[[../S4_React_State_and_Events/img-for-notes/img10.png]]
