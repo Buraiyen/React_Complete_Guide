@@ -462,3 +462,86 @@ export default ExpenseForm;
 - one problem you may have encountered is how can you manage more than one state?
   + you can call ~useState~ more than once inside of a component
 - it's not unusual to have more than one state for a component. You can and will have multiple
+
+* Using One State Instead (and What's Better)
+
+- there is an alternative from using multiple states, and it's up to you on what you choose
+- what we have now is 3 states for one purpose
+- what we can do instead is passing in an object into the ~useState()~ function
+
+#+begin_src javascript
+  // const [enteredTitle, setEnteredTitle] = useState("");
+  // const [enteredAmount, setEnteredAmount] = useState("");
+  // const [enteredDate, setEnteredDate] = useState("");
+
+const [userInput, setUserInput] = useState({
+    enteredTitle: '',
+    enteredAmount: '',
+    enteredDate: '',
+  });
+
+  const titleChangeHandler = (event) => {
+    // setEnteredTitle(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredTitle: event.target.value
+    })
+  };
+#+end_src
+
+- when you set the value for one field, you also need to ensure that the other two values don't get lost
+- you would need to use the spread operator (...), which takes an object, pulls out all of the key-value pairs, and overides the variable
+- it's more common to see separate states instead of them merged into one, which is fine
+- what's not fine is how we are updating the state
+
+* Updating the State That Depends on the Previous State
+
+#+begin_src javascript
+  const titleChangeHandler = (event) => {
+    // setEnteredTitle(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredTitle: event.target.value,
+    });
+  };
+
+  const amountChangeHandler = (event) => {
+    // setEnteredAmount(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredAmount: event.target.value,
+    });
+  };
+
+  const dateChangeHandler = (event) => {
+    // setEnteredDate(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredDate: event.target.value,
+    });
+  };
+#+end_src
+
+- what we did here with updating the state is not entirely correct
+- it could fail, and it's not a good practice to update like this
+- what's the problem? we depend on the previous state. We need to copy the other values so that we don't lose them
+- *Important note:* when you update state and depend on the previous state, you should not use what we have currently. Instead, you should pass in another function into the ~setUserInput()~ function. _This anonymous function receives the previous state_, which is held inside of a variable ~prevState~
+
+#+begin_src javascript
+ const titleChangeHandler = (event) => {
+    // setEnteredTitle(event.target.value);
+    // setUserInput({
+    //   ...userInput,
+    //   enteredTitle: event.target.value,
+    // });
+    setUserInput((prevState) => {
+      return { ...prevState, enteredTitle: event.target.value };
+    });
+  };
+#+end_src
+
+- why use this instead of the other method? They both work fine
+- keep in mind that React schedules updates and doesn't perform them instantly
+- if you schedule updates many times, you could be depending on an outdated or incorrect state snapshot if you use the old approach
+- our new function will always hold the latest state snapshot
+- for now, we will switch back to the multiple-state option
