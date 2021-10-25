@@ -1,5 +1,6 @@
 #+TITLE: Section 4: React State & Working with Events
 #+AUTHOR: Brian E. Nguyen
+#+LATEX_HEADER: \usepackage{minted}
 
 * Module Introduction
 In this module, we will take a closer look at the following
@@ -393,3 +394,71 @@ const ExpenseForm = () => {
 #+end_src
 
 [[../S4_React_State_and_Events/img-for-notes/img6.png]]
+
+* Working With Multiple States
+
+- the question is what do we want to do with this value?
+  + store it somewhere so that when the form is submitted, we can use that value
+- to make this value survive once the function is re-executed, we can use state
+- we will create the ~useState~ function and pass in an empty string; the reason is initally when the component is rendered for the first time, nothing will be entered.
+  + we will define the returned values as ~enteredTitle~ and ~setEnteredTitle~, and we can also do this for the other states for amount and date
+
+#+begin_src javascript
+import { useState } from "react";
+
+import "./ExpenseForm.css";
+const ExpenseForm = () => {
+  const [enteredTitle, setEnteredTitle] = useState("");
+  const [enteredAmount, setEnteredAmount] = useState("");
+  const [enteredDate, setEnteredDate] = useState("");
+
+  const titleChangeHandler = (event) => {
+    setEnteredTitle(event.target.value);
+  };
+
+  const amountChangeHandler = (event) => {
+    setEnteredAmount(event.target.value);
+  };
+
+  const dateChangeHandler = (event) => {
+    setEnteredDate(event.target.value);
+  };
+  return (
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__controls">
+          <label>Title</label>
+          <input type="text" onChange={titleChangeHandler} />
+        </div>
+        <div className="new-expense__controls">
+          <label>Amount</label>
+          <input
+            type="number"
+            min="0.01"
+            step="0.01"
+            onChange={amountChangeHandler}
+          />
+        </div>
+        <div className="new-expense__controls">
+          <label>Date</label>
+          <input
+            type="date"
+            min="2019-01-01"
+            max="2021-12-31"
+            onChange={dateChangeHandler}
+          />
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+};
+
+export default ExpenseForm;
+#+end_src
+
+- one problem you may have encountered is how can you manage more than one state?
+  + you can call ~useState~ more than once inside of a component
+- it's not unusual to have more than one state for a component. You can and will have multiple
