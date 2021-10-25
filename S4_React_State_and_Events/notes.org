@@ -582,3 +582,70 @@ const [userInput, setUserInput] = useState({
 - now let's log it so that we can see the output
 
 [[../S4_React_State_and_Events/img-for-notes/img7.png]]
+
+* Adding Two-Way Binding
+
+- how can we clear inputs after a form has been submitted?
+- we can use a technique called *two-way binding*, where we don't just listen to changes, but we can also pass a new value back into the input
+- this is very simple. On the ~<input>~ tag, we just need to add the ~value~ attribute and bind it to ~enteredTitle~, etc.
+  + when the form is submitted, then we can set it back to an empty string with ~setEnteredTitle()~, etc.
+
+#+begin_src javascript
+const submitHandler = (event) => {
+    event.preventDefault();
+
+    const expenseData = {
+      title: enteredTitle,
+      amount: enteredAmount,
+      date: new Date(enteredDate),
+    };
+
+    console.log(expenseData);
+    setEnteredTitle('');
+    setEnteredAmount('');
+    setEnteredDate('');
+  };
+
+  return (
+    <form onSubmit={submitHandler}>
+      <div className='new-expense__controls'>
+        <div className='new-expense__controls'>
+          <label>Title</label>
+          <input
+            type='text'
+            value={enteredTitle}
+            onChange={titleChangeHandler}
+          />
+        </div>
+        <div className='new-expense__controls'>
+          <label>Amount</label>
+          <input
+            type='number'
+            min='0.01'
+            step='0.01'
+            value={enteredAmount}
+            onChange={amountChangeHandler}
+          />
+        </div>
+        <div className='new-expense__controls'>
+          <label>Date</label>
+          <input
+            type='date'
+            min='2019-01-01'
+            max='2021-12-31'
+            value={enteredDate}
+            onChange={dateChangeHandler}
+          />
+        </div>
+      </div>
+      <div className='new-expense__actions'>
+        <button type='submit'>Add Expense</button>
+      </div>
+    </form>
+  );
+};
+#+end_src
+
+- now when we submit the form, we retrieve our data and the form will be cleared
+
+[[../S4_React_State_and_Events/img-for-notes/img8.png]]
