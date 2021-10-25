@@ -497,6 +497,7 @@ const [userInput, setUserInput] = useState({
 * Updating the State That Depends on the Previous State
 
 #+begin_src javascript
+// ExpenseForm.js
   const titleChangeHandler = (event) => {
     // setEnteredTitle(event.target.value);
     setUserInput({
@@ -528,6 +529,7 @@ const [userInput, setUserInput] = useState({
 - *Important note:* when you update state and depend on the previous state, you should not use what we have currently. Instead, you should pass in another function into the ~setUserInput()~ function. _This anonymous function receives the previous state_, which is held inside of a variable ~prevState~
 
 #+begin_src javascript
+// ExpenseForm.js
  const titleChangeHandler = (event) => {
     // setEnteredTitle(event.target.value);
     // setUserInput({
@@ -545,3 +547,38 @@ const [userInput, setUserInput] = useState({
 - if you schedule updates many times, you could be depending on an outdated or incorrect state snapshot if you use the old approach
 - our new function will always hold the latest state snapshot
 - for now, we will switch back to the multiple-state option
+
+
+* Handling Form Submission
+
+- let's make sure that the form is submitted when the button is pressed
+- we could add an ~onClick~ event to it, but that wouldn't be necessary. When a button, especially one that has ~type='submit'~ into it, is nested inside of a ~<form>~ tag, then the button will automatically emit an event
+- we will add an ~onSubmit~ event to the form and a new function called ~submitHandler()~
+- the default behavior of when a form is submitted is that the page reloads, because it is sending a request, and that's not what we want
+- just like all handler functions, we get an ~event~ object, and we can prevent page reloads
+
+#+begin_src javascript
+// ExpenseForm.js
+  const submitHandler = (event) => {
+    event.preventDefault();
+  };
+#+end_src
+
+- now we can retrieve the entered data and add them into a new object called ~expenseData~
+
+#+begin_src javascript
+// ExpenseForm.js
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    const expenseData = {
+      title: enteredTitle,
+      amount: enteredAmount,
+      date: new Date(enteredDate),
+    };
+  };
+#+end_src
+
+- now let's log it so that we can see the output
+
+[[../S4_React_State_and_Events/img-for-notes/img7.png]]
