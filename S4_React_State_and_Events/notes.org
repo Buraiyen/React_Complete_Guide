@@ -761,3 +761,45 @@ const NewExpense = (props) => {
 
 
 [[../S4_React_State_and_Events/img-for-notes/img10.png]]
+
+* Lifting the State Up
+
+- in the last lecture, we learned a very important concept of moving props from child to parent
+- we will now learn about a concept called *Lifting State Up*. What is that about?
+- consider this component tree, which is similar to the app that we have
+
+  + the ~NewExpense~ component generates data and state
+  + it's common that you generate data and state in a component, but you don't need them specifically in that component. Rather, you would move them to another one. In this case, we need to send data from ~NewExpense~ to ~Expenses~
+
+[[../S4_React_State_and_Events/img-for-notes/img11.png]]
+
+  + we would want to hand the data over, _but it doesn't work like that between two sibling components_. We can only communicate from parent to child
+  + in this case, we would use the parent component that is involved with both component, in this case, the ~App~ component
+
+#+begin_src js
+// App.js
+return (
+    <div>
+      <h2>Let's get started!</h2>
+      <NewExpense onAddExpense={addExpenseHandler} />
+      <Expenses expenses={expenses} />
+    </div>
+  );
+#+end_src
+
+  + we can store our state in the closest component by /lifting it up/
+
+[[../S4_React_State_and_Events/img-for-notes/img12.png]]
+
+  + we already have the data inside ~App~
+
+#+begin_src js
+const addExpenseHandler = (expense) => {
+    console.log('In App.js');
+    console.log(expense);
+  };
+#+end_src
+
+  + and now we just need to pass down the data to ~Expenses~ via props
+
+[[../S4_React_State_and_Events/img-for-notes/img13.png]]
