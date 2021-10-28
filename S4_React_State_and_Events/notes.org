@@ -948,3 +948,14 @@ export default ExpensesFilter;
 #+end_src
 
 - note that there is two-way binding involved as a bonus so that the year is 2020 by default
+
+* Controlled vs. Uncontrolled Components; Stateless vs Stateful Components
+
+- in the assignment, we created a *controlled component* for ~Expenses~, and it's not the first time we did that
+  + whenever we do two-way binding, we are controlling a component
+  + this means a value used in a component is passed on to a parent component, AND it is received from the parent component
+  + ~Expenses~ controls ~ExpenseFilter~
+
+- stateful vs. stateless components. What do they mean?
+  + in all React apps you build, you will have components that manage some state
+  + you will have components that don't manage any state. These kind of components are just there to output data
