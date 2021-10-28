@@ -803,3 +803,148 @@ const addExpenseHandler = (expense) => {
   + and now we just need to pass down the data to ~Expenses~ via props
 
 [[../S4_React_State_and_Events/img-for-notes/img13.png]]
+
+* Assignment 2: Working with States and Events
+
+** Goals For This Assignment
+
+1. Add a filter component called ~ExpenseFilter~. This allows us to use a dropdown and set a filter to pick a certain year
+   - [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/ExpensesFilter.js][click here for the JS code]]
+   - [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/ExpensesFilter.css][click here for the CSS code]]
+2. The challenge is to listen to changes on that dropdown, and when the user selects a new year/state, you should listen to that event and make sure that the picked year is forwarded to the ~Expenses~ component
+
+** My Solution
+
+/Note:/ I may have
+
+#+begin_src js
+// Expenses.js
+import ExpenseItem from './ExpenseItem';
+import ExpensesFilter from './ExpensesFilter';
+import Card from '../UI/Card';
+import './Expenses.css';
+
+const Expenses = (props) => {
+  const getYearHandler = (year) => {
+    console.log(year);
+  };
+
+  return (
+    <div>
+      <ExpensesFilter onYearRetrieval={getYearHandler} />
+      <Card className='expenses'>
+        {props.expenses.map(function (obj, i) {
+          return (
+            <ExpenseItem
+              title={props.expenses[i].title}
+              amount={props.expenses[i].amount}
+              date={props.expenses[i].date}
+            />
+          );
+        })}
+      </Card>
+    </div>
+  );
+};
+
+export default Expenses;
+#+end_src
+
+#+begin_src js
+// ExpensesFilter.js
+// import { useState } from 'react';
+
+import './ExpensesFilter.css';
+
+const ExpensesFilter = (props) => {
+  const clickHandler = (event) => {
+    const selectedYear = event.target.value;
+    props.onYearRetrieval(selectedYear);
+  };
+  return (
+    <div className='expenses-filter'>
+      <div className='expenses-filter__control'>
+        <label>Filter by year</label>
+        <select onClick={clickHandler}>
+          <option value='2022'>2022</option>
+          <option value='2021'>2021</option>
+          <option value='2020'>2020</option>
+          <option value='2019'>2019</option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
+export default ExpensesFilter;
+#+end_src
+
+** Their Solution
+
+#+begin_src js
+// Expenses.js
+import { useState } from 'react';
+
+import ExpenseItem from './ExpenseItem';
+import ExpensesFilter from './ExpensesFilter';
+import Card from '../UI/Card';
+import './Expenses.css';
+
+const Expenses = (props) => {
+  const [filteredYear, setFilteredYear] = useState('2020');
+  const filterChangeHandler = (selectedYear) => {
+    setFilteredYear(selectedYear);
+  };
+
+  return (
+    <div>
+      <Card className='expenses'>
+        <ExpensesFilter
+          selected={filteredYear}
+          onChangeFilter={filterChangeHandler}
+        />
+
+        {props.expenses.map(function (obj, i) {
+          return (
+            <ExpenseItem
+              title={props.expenses[i].title}
+              amount={props.expenses[i].amount}
+              date={props.expenses[i].date}
+            />
+          );
+        })}
+      </Card>
+    </div>
+  );
+};
+
+export default Expenses;
+#+end_src
+
+#+begin_src js
+// ExpensesFilter.js
+import './ExpensesFilter.css';
+
+const ExpensesFilter = (props) => {
+  const dropdownChangeHandler = (event) => {
+    props.onChangeFilter(event.target.value);
+  };
+  return (
+    <div className='expenses-filter'>
+      <div className='expenses-filter__control'>
+        <label>Filter by year</label>
+        <select value={props.selected} onChange={dropdownChangeHandler}>
+          <option value='2022'>2022</option>
+          <option value='2021'>2021</option>
+          <option value='2020'>2020</option>
+          <option value='2019'>2019</option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
+export default ExpensesFilter;
+#+end_src
+
+- note that there is two-way binding involved as a bonus so that the year is 2020 by default
