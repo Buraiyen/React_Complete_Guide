@@ -1,0 +1,8 @@
+#+TITLE: Section 5: Rendering Lists & Conditional Content
+#+AUTHOR: Brian E. Nguyen
+
+* Module Introduction
+
+In this section, we will look at the following:
+- outputting arrays of data
+- show different content based on different conditions
