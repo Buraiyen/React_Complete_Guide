@@ -1,0 +1,1017 @@
+#+TITLE: Section 4: React State & Working with Events
+#+AUTHOR: Brian E. Nguyen
+#+LATEX_HEADER: \usepackage{minted}
+
+* Module Introduction
+In this module, we will take a closer look at the following
+- user interaction
+  - this includes events like click, inputs, etc.
+- state management
+  - so far we can only build static applications where the state never changes, and that's not what we want
+
+* Listening to Events & Working With Event Handlers
+
+- we only have one state in our application, which is the inital state
+- let's start with clicks on a button which you want something to happen
+- in the ~ExpenseItem~ component, let's add a button tag
+  - this will be a temporary button with no styles so that we can practice with React states
+
+#+begin_src javascript
+// Expense Item
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- the goal of this button is to change the title when the button is clicked
+- React has a simple way of detecting button clicks
+- on all built-in HTML elements, we have full access to native DOM events which we can listen to
+- we will add a special prop in JSX called ~on~. This can be followed by ~onClick~, etc.
+  - from there, we can add JavaScript logic to it
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button onClick={() => {console.log('Clicked!')}}>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- we typically want to define a function before the ~return~ statement
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  const clickHandler = () => {
+    console.log("Clicked!");
+  };
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button onClick={clickHandler}>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- when we call the function, we don't add parentheses to it. Why? Because JavaScript will execute the function when the entire JSX line is parsed
+- it's a convention that these functions end with ~Handler~. Not everyone does this, but take note of it
+
+* How Component Functions Are Executed
+
+- reacting to events is an important first step. How can we now change what shows up on the screen?
+- we can add a new variable called ~title~ and pass it into the JSX code.
+- now that we created a variable, we can use the ~clickHandler~ function to let us change the title
+
+#+begin_src javascript
+// ExpenseItem.js
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  let title = props.title;
+
+  const clickHandler = () => {
+    title = "Updated!";
+  };
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+      <button onClick={clickHandler}>Change Title</button>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- but if we were to actually click on the button, the title doesn't change. Why is that? The click handler still executed though and the value of ~title~ is "Updated!"
+- the reason is simply because React doesn't work like this. We'll dive deeper into the reason later in the course
+- what you need to know right now is that your component is a function; the only special thing about this function is that it returns JSX code
+- we never explicity call our component functions. We just use them like HTML elements
+- *the main point:* by using components like HTML elements, we make React aware of these component functions. When React evaluates the JSX, it will call the component functions
+  + then the component functions will call any component functions inside of them. This process will repeat itself until there is no more JSX
+- now, we need a way to tell React to reevaluate these component functions when we execute a handler
+
+* Working with 'State'
+
+- /state/ is not a React-specific concept
+- we need to trigger a re-evaluation so that we can change our title
+  + note that variables, like ~title~ are not triggered in the re-evaluation
+  + React doesn't care about that. The component function doesn't get re-evaluated just because a variable changed
+- to tell React that the component function should run again, we need to import something from the React library called ~useState~
+  + this is a function provided by the React library which allows us to define values as state, where changes to these values should reflect in the component function
+
+#+begin_src javascript
+import React, { useState } from 'react';
+#+end_src
+
+- /inside/ of our component function, we just call ~useState~ to use it
+- /tip:/ hook functions start with /use/ and can only be called inside component functions, but not inside nested functions
+- with ~useState~, it wants a default-state value. We can assign an initial variable of ~props.title~ and pass it as an argument inside ~useState~
+
+#+begin_src javascript
+// ExpenseItem.js
+import React, { useState } from "react";
+
+import ExpenseDate from "./ExpenseDate";
+import Card from "../UI/Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  useState(props.title);
+
+  let title = props.title;
+
+  const clickHandler = () => {
+    title = "Updated!";
+  };
+  return
+...
+}
+#+end_src
+
+- ~useState~ not only lets us use the special variable in other places, but it also returns a function that we can call to assign a new value to that variable
+  + ~useState~ returns an array where it has two values inside of it:
+    1. the variable itself
+    2. the updating function
+  + you can use array-destructuring to retrieve these values
+
+#+begin_src javascript
+const [title, setTitle] = useState(props.title)
+#+end_src
+
+- this is now what the updated function looks like with ~setTitle~ in use
+
+#+begin_src javascript
+const ExpenseItem = (props) => {
+  const [title, setTitle] = useState(props.title);
+
+  const clickHandler = () => {
+    setTitle("Updated!");
+  };
+  ...
+}
+#+end_src
+
+- note that the ~setTitle~ function doesn't only assign the new value to a new variable, but it is also managed by React somewhere in memory because it's a special variable
+- now when we click on a button, the title now updates it
+
+[[../S4_React_State_and_Events/img-for-notes/img1.png]]
+
+* A Closer Look at the "useState" Hook
+
+** Per-Component Basis
+
+- ~useState~ registers some value as a state for the component in which it is being called
+  + to be more precise, it registers it for a specific component instance
+- in our ~Expenses~ component, our ~ExpenseItem~ component is used four times
+
+#+begin_src javascript
+// Expenses.js
+
+// Note that the props passed in have 4 objects
+const Expenses = (props) => {
+  return (
+    <Card className="expenses">
+      {props.expenses.map(function (obj, i) {
+        return (
+          <ExpenseItem
+            title={props.expenses[i].title}
+            amount={props.expenses[i].amount}
+            date={props.expenses[i].date}
+          />
+        );
+      })}
+    </Card>
+  );
+};
+#+end_src
+
+- the ~useState~ function is called 4 times when we create the 4 ~ExpenseItem~ components, and each are managed independently by React
+  + that is why when we click on a button and title changes, the rest of the titles don't change, because they have their own state
+- if we put a ~console.log()~ in our component, when we load up a page, this code will run 4 times; however, when we click on a button, it only runs once
+
+#+begin_src javascript
+// ExpenseItem.js
+ const ExpenseItem = (props) => {
+  const [title, setTitle] = useState(props.title);
+  console.log("Component evaluated by React");
+  const clickHandler = () => {
+    setTitle("Updated!");
+    console.log(title);
+  };
+  ...
+#+end_src
+
+[[../S4_React_State_and_Events/img-for-notes/img2.png]]
+
+- the takeaway is that /state is separated on a per-component basis/
+
+** Using ~const~?
+
+- why are we using ~const~ at the array-destructuring part when we eventually assign it a new value?
+- note that we are not assigning a value with the = sign when we update the state
+- instead, we call the state-updating function, and the value is managed somewhere else in React
+- we never assign the value of ~title~ with the = operator; therefore, using ~const~ is fine
+
+** Closing Mentions
+
+- knowing state is important, because in more complex apps, there could be times when a value doesn't update when it should
+- using state is simple.
+  1. You just register state with ~useState~,
+  2. you always get two values,
+  3. you call the updating function, and
+  4. you use the first value for outputs in JSX code
+
+* State Can Be Updated in Many Ways
+
+Thus far, we update our state *upon user events*, (e.g. upon a click). That's very common but not required for state updates. *You can update states for whatever reason you many have.
+
+Later in the course, we'll see HTTP requests where we want to update the state based on the HTTP response, but you could also be updating state because a timer (set with ~setTimeout()~) expired for example
+
+* Adding Form Inputs
+
+- on thing that is missing from our app is getting user input
+- we will add new components and a new category of components.
+  + We will call this folder ~NewExpense~
+  + inside of the folder, we will add a new component called ~NewExpense~ where it will render a form for users to input information, as well as its styles
+    - [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/NewExpense.css][click here to access the CSS code for NewExpense]]
+
+- we will also take the form and put it into a separate component so that the form logic is in it's own component. This will be called ~ExpenseForm.js~
+  + [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/ExpenseForm.css][click here for the ExpenseForm CSS code]]
+
+#+begin_src javascript
+// ExpenseForm.js
+import "./ExpenseForm.css";
+const ExpenseForm = () => {
+  return (
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__controls">
+          <label>Title</label>
+          <input type="text" />
+        </div>
+        <div className="new-expense__controls">
+          <label>Amount</label>
+          <input type="number" min="0.01" step="0.01" />
+        </div>
+        <div className="new-expense__controls">
+          <label>Date</label>
+          <input type="date" min="2019-01-01" max="2021-12-31" />
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+};
+
+export default ExpenseForm;
+#+end_src
+
+- we will add event listeners to this form soon
+- now we will import this component to ~NewExpense~
+
+#+begin_src javascript
+// NewExpense.js
+import ExpenseForm from "./ExpenseForm";
+
+import "./NewExpense.css";
+
+const NewExpense = () => {
+  return (
+    <div className="new-expense">
+      <ExpenseForm />
+    </div>
+  );
+};
+
+export default NewExpense;
+#+end_src
+
+- now we want to render the ~NewExpense~ component inside ~App.js~
+
+[[../S4_React_State_and_Events/img-for-notes/img3.png]]
+
+- in the next lesson, we will figure out how to make the form retrieve input, because it's not doing anything right now
+
+* Listening to User Input
+
+- let's add an ~onChange~ event listener to the user input on ~ExpenseForm.js~
+
+#+begin_src javascript
+import "./ExpenseForm.css";
+const ExpenseForm = () => {
+  const titleChangeHandler = () => {
+    console.log("Title changed!");
+  };
+
+  return (
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__controls">
+          <label>Title</label>
+          <input type="text" onChange={titleChangeHandler} />
+        </div>
+        <div className="new-expense__controls">
+          <label>Amount</label>
+          <input type="number" min="0.01" step="0.01" />
+        </div>
+        <div className="new-expense__controls">
+          <label>Date</label>
+          <input type="date" min="2019-01-01" max="2021-12-31" />
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+};
+
+export default ExpenseForm;
+#+end_src
+
+[[../S4_React_State_and_Events/img-for-notes/img4.png]]
+
+- the title changes for every keystroke. But now we actually want to get the user input
+- we can get the event as an object. This has a lot of data, but the one we're interested in is ~target~ that has a property called ~value~. This holds the value of the user input
+
+[[../S4_React_State_and_Events/img-for-notes/img5.png]]
+
+- we can now use that value for our purposes
+
+#+begin_src javascript
+// ExpenseForm.js
+const ExpenseForm = () => {
+  const titleChangeHandler = (event) => {
+    console.log(event.target.value);
+  };
+#+end_src
+
+[[../S4_React_State_and_Events/img-for-notes/img6.png]]
+
+* Working With Multiple States
+
+- the question is what do we want to do with this value?
+  + store it somewhere so that when the form is submitted, we can use that value
+- to make this value survive once the function is re-executed, we can use state
+- we will create the ~useState~ function and pass in an empty string; the reason is initally when the component is rendered for the first time, nothing will be entered.
+  + we will define the returned values as ~enteredTitle~ and ~setEnteredTitle~, and we can also do this for the other states for amount and date
+
+#+begin_src javascript
+import { useState } from "react";
+
+import "./ExpenseForm.css";
+const ExpenseForm = () => {
+  const [enteredTitle, setEnteredTitle] = useState("");
+  const [enteredAmount, setEnteredAmount] = useState("");
+  const [enteredDate, setEnteredDate] = useState("");
+
+  const titleChangeHandler = (event) => {
+    setEnteredTitle(event.target.value);
+  };
+
+  const amountChangeHandler = (event) => {
+    setEnteredAmount(event.target.value);
+  };
+
+  const dateChangeHandler = (event) => {
+    setEnteredDate(event.target.value);
+  };
+  return (
+    <form>
+      <div className="new-expense__controls">
+        <div className="new-expense__controls">
+          <label>Title</label>
+          <input type="text" onChange={titleChangeHandler} />
+        </div>
+        <div className="new-expense__controls">
+          <label>Amount</label>
+          <input
+            type="number"
+            min="0.01"
+            step="0.01"
+            onChange={amountChangeHandler}
+          />
+        </div>
+        <div className="new-expense__controls">
+          <label>Date</label>
+          <input
+            type="date"
+            min="2019-01-01"
+            max="2021-12-31"
+            onChange={dateChangeHandler}
+          />
+        </div>
+      </div>
+      <div className="new-expense__actions">
+        <button type="submit">Add Expense</button>
+      </div>
+    </form>
+  );
+};
+
+export default ExpenseForm;
+#+end_src
+
+- one problem you may have encountered is how can you manage more than one state?
+  + you can call ~useState~ more than once inside of a component
+- it's not unusual to have more than one state for a component. You can and will have multiple
+
+* Using One State Instead (and What's Better)
+
+- there is an alternative from using multiple states, and it's up to you on what you choose
+- what we have now is 3 states for one purpose
+- what we can do instead is passing in an object into the ~useState()~ function
+
+#+begin_src javascript
+  // const [enteredTitle, setEnteredTitle] = useState("");
+  // const [enteredAmount, setEnteredAmount] = useState("");
+  // const [enteredDate, setEnteredDate] = useState("");
+
+const [userInput, setUserInput] = useState({
+    enteredTitle: '',
+    enteredAmount: '',
+    enteredDate: '',
+  });
+
+  const titleChangeHandler = (event) => {
+    // setEnteredTitle(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredTitle: event.target.value
+    })
+  };
+#+end_src
+
+- when you set the value for one field, you also need to ensure that the other two values don't get lost
+- you would need to use the spread operator (...), which takes an object, pulls out all of the key-value pairs, and overides the variable
+- it's more common to see separate states instead of them merged into one, which is fine
+- what's not fine is how we are updating the state
+
+* Updating the State That Depends on the Previous State
+
+#+begin_src javascript
+// ExpenseForm.js
+  const titleChangeHandler = (event) => {
+    // setEnteredTitle(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredTitle: event.target.value,
+    });
+  };
+
+  const amountChangeHandler = (event) => {
+    // setEnteredAmount(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredAmount: event.target.value,
+    });
+  };
+
+  const dateChangeHandler = (event) => {
+    // setEnteredDate(event.target.value);
+    setUserInput({
+      ...userInput,
+      enteredDate: event.target.value,
+    });
+  };
+#+end_src
+
+- what we did here with updating the state is not entirely correct
+- it could fail, and it's not a good practice to update like this
+- what's the problem? we depend on the previous state. We need to copy the other values so that we don't lose them
+- *Important note:* when you update state and depend on the previous state, you should not use what we have currently. Instead, you should pass in another function into the ~setUserInput()~ function. _This anonymous function receives the previous state_, which is held inside of a variable ~prevState~
+
+#+begin_src javascript
+// ExpenseForm.js
+ const titleChangeHandler = (event) => {
+    // setEnteredTitle(event.target.value);
+    // setUserInput({
+    //   ...userInput,
+    //   enteredTitle: event.target.value,
+    // });
+    setUserInput((prevState) => {
+      return { ...prevState, enteredTitle: event.target.value };
+    });
+  };
+#+end_src
+
+- why use this instead of the other method? They both work fine
+- keep in mind that React schedules updates and doesn't perform them instantly
+- if you schedule updates many times, you could be depending on an outdated or incorrect state snapshot if you use the old approach
+- our new function will always hold the latest state snapshot
+- for now, we will switch back to the multiple-state option
+
+
+* Handling Form Submission
+
+- let's make sure that the form is submitted when the button is pressed
+- we could add an ~onClick~ event to it, but that wouldn't be necessary. When a button, especially one that has ~type='submit'~ into it, is nested inside of a ~<form>~ tag, then the button will automatically emit an event
+- we will add an ~onSubmit~ event to the form and a new function called ~submitHandler()~
+- the default behavior of when a form is submitted is that the page reloads, because it is sending a request, and that's not what we want
+- just like all handler functions, we get an ~event~ object, and we can prevent page reloads
+
+#+begin_src javascript
+// ExpenseForm.js
+  const submitHandler = (event) => {
+    event.preventDefault();
+  };
+#+end_src
+
+- now we can retrieve the entered data and add them into a new object called ~expenseData~
+
+#+begin_src javascript
+// ExpenseForm.js
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    const expenseData = {
+      title: enteredTitle,
+      amount: enteredAmount,
+      date: new Date(enteredDate),
+    };
+  };
+#+end_src
+
+- now let's log it so that we can see the output
+
+[[../S4_React_State_and_Events/img-for-notes/img7.png]]
+
+* Adding Two-Way Binding
+
+- how can we clear inputs after a form has been submitted?
+- we can use a technique called *two-way binding*, where we don't just listen to changes, but we can also pass a new value back into the input
+- this is very simple. On the ~<input>~ tag, we just need to add the ~value~ attribute and bind it to ~enteredTitle~, etc.
+  + when the form is submitted, then we can set it back to an empty string with ~setEnteredTitle()~, etc.
+
+#+begin_src javascript
+const submitHandler = (event) => {
+    event.preventDefault();
+
+    const expenseData = {
+      title: enteredTitle,
+      amount: enteredAmount,
+      date: new Date(enteredDate),
+    };
+
+    console.log(expenseData);
+    setEnteredTitle('');
+    setEnteredAmount('');
+    setEnteredDate('');
+  };
+
+  return (
+    <form onSubmit={submitHandler}>
+      <div className='new-expense__controls'>
+        <div className='new-expense__controls'>
+          <label>Title</label>
+          <input
+            type='text'
+            value={enteredTitle}
+            onChange={titleChangeHandler}
+          />
+        </div>
+        <div className='new-expense__controls'>
+          <label>Amount</label>
+          <input
+            type='number'
+            min='0.01'
+            step='0.01'
+            value={enteredAmount}
+            onChange={amountChangeHandler}
+          />
+        </div>
+        <div className='new-expense__controls'>
+          <label>Date</label>
+          <input
+            type='date'
+            min='2019-01-01'
+            max='2021-12-31'
+            value={enteredDate}
+            onChange={dateChangeHandler}
+          />
+        </div>
+      </div>
+      <div className='new-expense__actions'>
+        <button type='submit'>Add Expense</button>
+      </div>
+    </form>
+  );
+};
+#+end_src
+
+- now when we submit the form, we retrieve our data and the form will be cleared
+
+[[../S4_React_State_and_Events/img-for-notes/img8.png]]
+
+* Child-to-Parent Component Communication (Bottom-up)
+
+** Intro
+
+- the problem is that this data is nice, but we don't need it inside of the ~ExpenseForm~ component. Instead, we need it inside ~NewExpense~ or ~App~
+- we need to pass data to the ~App~ component
+- so far we only learned how  to pass data down. Now we need to figure out passing it up
+- we actually saw how it works, but you most likely missed it
+  + in ~ExpenseForm~, we are listening to user input. The change handlers are an example of this
+  + you can think of the attributes in the ~<input>~ tag as an example
+
+** Pass Data from ~ExpenseForm~ to ~NewExpense~
+
+1. let's say we want to pass ~expenseData~ from ~ExpenseForm~ to ~NewExpense~. Props can be only passed from parent to child. As a first step inside of ~NewExpense~, we will add a new prop to ~ExpenseForm~
+   + note that you cannot skip components
+2. We can create our own custom props. Let's call it ~onSaveExpenseData~
+
+#+begin_src javascript
+// NewExpense.js
+import ExpenseForm from "./ExpenseForm";
+
+import "./NewExpense.css";
+
+const NewExpense = () => {
+  return (
+    <div className="new-expense">
+      <ExpenseForm onSaveExpenseData />
+    </div>
+  );
+};
+
+export default NewExpense;
+#+end_src
+
+3. Then we will create a new function that will expect submitted data from the form. From there, we can pass that function to ~onSaveExpenseData~
+
+#+begin_src js
+const NewExpense = () => {
+  const saveExpenseDataHandler = (enteredExpenseData) => {
+    const expenseData = {
+      ...enteredExpenseData,
+      id: Math.random().toString(),
+    };
+  };
+  return (
+    <div className='new-expense'>
+      <ExpenseForm onSaveExpenseData={saveExpenseDataHandler} />
+    </div>
+  );
+};
+#+end_src
+
+4. Now we need to use this function inside of our ~ExpenseForm~ component. We would need to pass in props inside of our component
+5. Inside of our ~submitHandler()~ function, we would need to call ~props.onSaveExpenseData()~ and pass in ~expenseData~
+
+#+begin_src js
+// ExpenseForm.js
+const ExpenseForm = (props) => {
+  ...
+  props.onSaveExpenseData(expenseData);
+  setEnteredTitle('');
+  setEnteredAmount('');
+  setEnteredDate('');
+}
+#+end_src
+
+- now when we submit data, the data is now being logged to ~NewExpense~
+- we can also tell that the data is new because it now has a randomly generated ID
+
+[[../S4_React_State_and_Events/img-for-notes/img9.png]]
+
+** Pass Data from ~NewExpense~ to ~App~
+
+1. create a new function called ~addExpenseHandler~ inside of ~App~A
+
+#+begin_src js
+// App.js
+const addExpenseHandler = (expense) => {
+    console.log(expense);
+  };
+#+end_src
+
+2. create a prop called ~onAddExpense~ to ~NewExpense~ tag and add the function to it
+
+#+begin_src js
+// App.js
+return (
+    <div>
+      <h2>Let's get started!</h2>
+      <NewExpense onAddExpense={addExpenseHandler} />
+      <Expenses expenses={expenses} />
+    </div>
+  );
+#+end_src
+
+3. Allow ~NewExpense~ to accept props and call the function with ~expenseData~ passed into it
+
+#+begin_src js
+// NewExpense.js
+const NewExpense = (props) => {
+  const saveExpenseDataHandler = (enteredExpenseData) => {
+    const expenseData = {
+      ...enteredExpenseData,
+      id: Math.random().toString(),
+    };
+    props.onAddExpense(expenseData);
+  };
+#+end_src
+
+
+[[../S4_React_State_and_Events/img-for-notes/img10.png]]
+
+* Lifting the State Up
+
+- in the last lecture, we learned a very important concept of moving props from child to parent
+- we will now learn about a concept called *Lifting State Up*. What is that about?
+- consider this component tree, which is similar to the app that we have
+
+  + the ~NewExpense~ component generates data and state
+  + it's common that you generate data and state in a component, but you don't need them specifically in that component. Rather, you would move them to another one. In this case, we need to send data from ~NewExpense~ to ~Expenses~
+
+[[../S4_React_State_and_Events/img-for-notes/img11.png]]
+
+  + we would want to hand the data over, _but it doesn't work like that between two sibling components_. We can only communicate from parent to child
+  + in this case, we would use the parent component that is involved with both component, in this case, the ~App~ component
+
+#+begin_src js
+// App.js
+return (
+    <div>
+      <h2>Let's get started!</h2>
+      <NewExpense onAddExpense={addExpenseHandler} />
+      <Expenses expenses={expenses} />
+    </div>
+  );
+#+end_src
+
+  + we can store our state in the closest component by /lifting it up/
+
+[[../S4_React_State_and_Events/img-for-notes/img12.png]]
+
+  + we already have the data inside ~App~
+
+#+begin_src js
+const addExpenseHandler = (expense) => {
+    console.log('In App.js');
+    console.log(expense);
+  };
+#+end_src
+
+  + and now we just need to pass down the data to ~Expenses~ via props
+
+[[../S4_React_State_and_Events/img-for-notes/img13.png]]
+
+* Assignment 2: Working with States and Events
+
+** Goals For This Assignment
+
+1. Add a filter component called ~ExpenseFilter~. This allows us to use a dropdown and set a filter to pick a certain year
+   - [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/ExpensesFilter.js][click here for the JS code]]
+   - [[https://github.com/academind/react-complete-guide-code/blob/04-react-state-events/extra-files/ExpensesFilter.css][click here for the CSS code]]
+2. The challenge is to listen to changes on that dropdown, and when the user selects a new year/state, you should listen to that event and make sure that the picked year is forwarded to the ~Expenses~ component
+
+** My Solution
+
+/Note:/ I may have
+
+#+begin_src js
+// Expenses.js
+import ExpenseItem from './ExpenseItem';
+import ExpensesFilter from './ExpensesFilter';
+import Card from '../UI/Card';
+import './Expenses.css';
+
+const Expenses = (props) => {
+  const getYearHandler = (year) => {
+    console.log(year);
+  };
+
+  return (
+    <div>
+      <ExpensesFilter onYearRetrieval={getYearHandler} />
+      <Card className='expenses'>
+        {props.expenses.map(function (obj, i) {
+          return (
+            <ExpenseItem
+              title={props.expenses[i].title}
+              amount={props.expenses[i].amount}
+              date={props.expenses[i].date}
+            />
+          );
+        })}
+      </Card>
+    </div>
+  );
+};
+
+export default Expenses;
+#+end_src
+
+#+begin_src js
+// ExpensesFilter.js
+// import { useState } from 'react';
+
+import './ExpensesFilter.css';
+
+const ExpensesFilter = (props) => {
+  const clickHandler = (event) => {
+    const selectedYear = event.target.value;
+    props.onYearRetrieval(selectedYear);
+  };
+  return (
+    <div className='expenses-filter'>
+      <div className='expenses-filter__control'>
+        <label>Filter by year</label>
+        <select onClick={clickHandler}>
+          <option value='2022'>2022</option>
+          <option value='2021'>2021</option>
+          <option value='2020'>2020</option>
+          <option value='2019'>2019</option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
+export default ExpensesFilter;
+#+end_src
+
+** Their Solution
+
+#+begin_src js
+// Expenses.js
+import { useState } from 'react';
+
+import ExpenseItem from './ExpenseItem';
+import ExpensesFilter from './ExpensesFilter';
+import Card from '../UI/Card';
+import './Expenses.css';
+
+const Expenses = (props) => {
+  const [filteredYear, setFilteredYear] = useState('2020');
+  const filterChangeHandler = (selectedYear) => {
+    setFilteredYear(selectedYear);
+  };
+
+  return (
+    <div>
+      <Card className='expenses'>
+        <ExpensesFilter
+          selected={filteredYear}
+          onChangeFilter={filterChangeHandler}
+        />
+
+        {props.expenses.map(function (obj, i) {
+          return (
+            <ExpenseItem
+              title={props.expenses[i].title}
+              amount={props.expenses[i].amount}
+              date={props.expenses[i].date}
+            />
+          );
+        })}
+      </Card>
+    </div>
+  );
+};
+
+export default Expenses;
+#+end_src
+
+#+begin_src js
+// ExpensesFilter.js
+import './ExpensesFilter.css';
+
+const ExpensesFilter = (props) => {
+  const dropdownChangeHandler = (event) => {
+    props.onChangeFilter(event.target.value);
+  };
+  return (
+    <div className='expenses-filter'>
+      <div className='expenses-filter__control'>
+        <label>Filter by year</label>
+        <select value={props.selected} onChange={dropdownChangeHandler}>
+          <option value='2022'>2022</option>
+          <option value='2021'>2021</option>
+          <option value='2020'>2020</option>
+          <option value='2019'>2019</option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
+export default ExpensesFilter;
+#+end_src
+
+- note that there is two-way binding involved as a bonus so that the year is 2020 by default
+
+* Controlled vs. Uncontrolled Components; Stateless vs Stateful Components
+
+- in the assignment, we created a *controlled component* for ~Expenses~, and it's not the first time we did that
+  + whenever we do two-way binding, we are controlling a component
+  + this means a value used in a component is passed on to a parent component, AND it is received from the parent component
+  + ~Expenses~ controls ~ExpenseFilter~
+
+- stateful vs. stateless components. What do they mean?
+  + in all React apps you build, you will have components that manage some state
+  + you will have components that don't manage any state. These kind of components are just there to output data
+
+* Quiz 2
+
+1. How should you NOT listen to events when working with React?
+   a. *Adding an event listener (e.g. via "addEventListener") manually.*
+   b. Setting an event handler function via props (e.g. onClick={...})
+   c. You can't listen to events, React is about outputting data only.
+
+2. Which value should you pass to event listener props like onClick?
+   a. The code that should execute when that event occurs.
+   b. The result of calling a function that should execute when the event occurs.
+   c. *A pointer at the function that should execute when the event occurs.*
+
+3. How can you communicate from one of your components to a parent (i.e. higher level) component?
+   a. *You can accept a function via props and call it from inside the lower-level (child) component to then trigger some action in the parent component (which passed the function).*
+   b. You can accept an event via props and trigger it from inside the lower-level (child) component to then trigger some action in the parent component (which passed the function).
+   c. You can't communicate up, only down - i.e. you can only pass props down to pass data down to a component. You can't trigger an action in a higher-level component.
+
+4. How can you change what a component displays on the screen?
+   a. Use a regular JavaScript variable, change the value and output the variable's value in JSX.
+   b. You can't change the output - components are static in React apps.
+   c. *Create some "state" value (via useState) which you can then change and output in JSX.*
+
+5. Why do you need this extra "state" concept instead of regular JS variables which you change and use?
+   a.  Because it's less code
+   b.  Because standard JS variables don't cause React components to be re-evaluated
+   c.  Because standard JS variables are not supported in React components
+
+6. Which statement about ~useState~ is *NOT* correct?
+   a. It receives an (optional) initial state value as an argument
+   b. *Calling ~useState~ again will update the state value*
+   c. It returns an array with exactly two elements
+
+- note, this is because calling ~useState~ will create a new state
+
+7. How can you update component state (created via useState)?
+   a. You can assign a new value to the state variable.
+   b. *You can call the state updating function which useState also returned.*
+   c. You can call ~useState~ again
+
+8. How much state may you manage in one single component?
+   a. *You can have as many state slices as you need / want.*
+   b. You should at most have one state (merge multiple states into a state object).
+   c. You can have multiple state slices if at least one of them is an object.
+
+9. What's wrong with this code snippet?
+
+#+begin_src js
+const [counter, setCounter] = useState(1);
+...
+setCounter(counter + 1);
+#+end_src
+
+   a. Nothing wrong with it
+   b. State can't be a number
+   c. *If you update state that depends on the previous state, you should use the "function form" of the state updating function instead.*
