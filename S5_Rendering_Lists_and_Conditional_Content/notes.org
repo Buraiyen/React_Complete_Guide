@@ -38,3 +38,38 @@ _Their solution_
           />
         ))}
 #+end_src
+
+* Using Stateful Lists
+
+- how could we update the list when we add a new item?
+- remember that when we update a variable, React won't automatically update the component.
+  + we need to figure out how to update the ~expenses~ array in the ~App~ component
+1. we will achieve this by using state. Inside of ~App~, import the ~useState()~ function
+2. extract the ~expenses~ array outside of the component function and give it a global variable name called ~INITIAL_EXPENSES~
+3. Inside of the component function, we call ~useState()~ and pass in the array
+
+#+begin_src js
+const [expenses, setExpenses] = useState(INITIAL_EXPENSES);
+#+end_src
+
+4. Inside of our ~addExpenseHandler()~ we will call the ~setExpenses()~ function to set our expenses array to a new one
+
+#+begin_src js
+const addExpenseHandler = (expense) => {
+  setExpenses([expense, ...expenses]);
+};
+#+end_src
+
+If you update the state like this, however, this is not correct because you are depending on the last state. Instead, you should use a special function that automatically retrieves the older snapshot of the previous state
+
+#+begin_src js
+const addExpenseHandler = (expense) => {
+    setExpenses((prevExpenses) => {
+      return [...prevExpenses, expense];
+    });
+  };
+#+end_src
+
+*NOTE*: there seems to be a bug where ~[expense, ...prevExpense]~ doesn't update the title. A workaround for this is inside of ~ExpenseItem~, change ~title~ to ~props.title~
+
+[[./img-for-notes/img1.png]]
