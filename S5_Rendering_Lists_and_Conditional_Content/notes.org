@@ -6,3 +6,35 @@
 In this section, we will look at the following:
 - outputting arrays of data
 - show different content based on different conditions
+
+* Rendering Lists of Data
+
+- in our app, our list is static
+- if we try to change the filter or add an item, nothing happens
+- we will use a loop to dynamically render these components. *Note:* I've already done this, but I will compare what I did to their's
+
+_My solution_
+
+#+begin_src js
+{props.expenses.map(function (obj, i) {
+          return (
+            <ExpenseItem
+              title={props.expenses[i].title}
+              amount={props.expenses[i].amount}
+              date={props.expenses[i].date}
+            />
+          );
+        })}
+#+end_src
+
+_Their solution_
+
+#+begin_src js
+{props.expenses.map((expense) => (
+          <ExpenseItem
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        ))}
+#+end_src
