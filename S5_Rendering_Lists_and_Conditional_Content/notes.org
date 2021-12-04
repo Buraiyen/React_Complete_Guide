@@ -166,3 +166,69 @@ const Expenses = (props) => {
 };
 export default Expenses;
 #end_src
+
+* Outputting Conditional Content
+
+- there are situations where we have no data for a certain year. In such case, we would want to show a message saying that there isn't any expenses for that year
+- to do that, we would need to write a dynamic expression with in our JSX code. Things like 'if' or 'for' are not allowed, so we need to user ternary expressions
+
+#+begin_src js
+{filteredExpenses.length === 0 ? (
+          <p>No expenses found!</p>
+        ) : (
+          filteredExpenses.map((expense) => (
+            <ExpenseItem
+              key={expense.id}
+              title={expense.title}
+              amount={expense.amount}
+              date={expense.date}
+            />
+          ))
+        )}
+#+end_src js
+
+[[./img-for-notes/img3.png]]
+
+- long ternary expressions like this are a bit hard to read. Let's make another conditions
+
+#+begin_src js
+{filteredExpenses.length === 0 && <p>No expenses found!</p>}
+{filteredExpenses.length > 0 &&
+    filteredExpenses.map((expense) => (
+      <ExpenseItem
+        key={expense.id}
+        title={expense.title}
+        amount={expense.amount}
+        date={expense.date}
+      />
+    ))}
+#+end_src
+
+- How JS code works is that the && returns the value after it
+- even after we done this way, this might still be too much code.
+- we can also store JSX content inside variables
+
+
+
+#+begin_src js
+  let expensesContent = <p>No expenses found!</p>;
+  if (filteredExpenses.length > 0) {
+    expensesContent = filteredExpenses.map((expense) => (
+      <ExpenseItem
+        key={expense.id}
+        title={expense.title}
+        amount={expense.amount}
+        date={expense.date}
+      />
+    ));
+  }
+
+  return (
+    <div>
+      <Card className='expenses'>
+        <ExpensesFilter
+          selected={filteredYear}
+          onChangeFilter={filterChangeHandler}
+        />
+        {expensesContent}
+#+end_src
