@@ -73,3 +73,96 @@ const addExpenseHandler = (expense) => {
 *NOTE*: there seems to be a bug where ~[expense, ...prevExpense]~ doesn't update the title. A workaround for this is inside of ~ExpenseItem~, change ~title~ to ~props.title~
 
 [[./img-for-notes/img1.png]]
+
+* Understanding Keys
+
+[[./img-for-notes/img1.png]]
+
+- why are we getting this key warning? Afterall, everything works out
+- React has a special featue so that it updates lists efficiently and without bugs
+- if we were to look at the ~<div>~ tags when adding a new item, the tags flash
+- what's happening is that when we add a new item, React renders the item as the last item for the list of ~<div>~, and takes all ~<div>~'s and replaces their contents
+- the final result of this is correct, *but performance-wise, this is not great*, and it could also lead to bugs
+
+** Reasoning Behind this
+
+- why does React act like this? Because it has no other way. It checks the length of the array and looks at the number of items that were already rendered, so it can't know where it should at the item
+- to fix this, we would need to go to ~Expennses.js~ and add a special prop to the list rendering section, which is the ~key~ prop. You can add this to any component in React
+
+#+begin_src js
+props.items.map((expense) => (
+          <ExpenseItem
+            key={expense.id}
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        ))}
+#+end_src
+
+- if you had no unique ID in your array, then you could use the ~index~ value of the ~map~ function, though it's discouraged
+
+#+begin_src js
+props.items.map((expense, index) => (
+          <ExpenseItem
+            key={index}
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        ))}
+#+end_src
+
+* Assignment 3 - Working with Lists
+
+Todo: make the filter actually work
+
+#+begin_src js
+import { useState } from 'react';
+
+import ExpenseItem from './ExpenseItem';
+import ExpensesFilter from './ExpensesFilter';
+import Card from '../UI/Card';
+import './Expenses.css';
+
+const Expenses = (props) => {
+  const [filteredYear, setFilteredYear] = useState('2020');
+  const filterChangeHandler = (selectedYear) => {
+    setFilteredYear(selectedYear);
+  };
+// RIGHT OVER HERE
+  const filteredExpenses = props.items.filter((expense) => {
+    return expense.date.getFullYear().toString() === filteredYear;
+  });
+
+  return (
+    <div>
+      <Card className='expenses'>
+        <ExpensesFilter
+          selected={filteredYear}
+          onChangeFilter={filterChangeHandler}
+        />
+        // AND RIGHT HERE
+        {filteredExpenses.map((expense) => (
+          <ExpenseItem
+            key={expense.id}
+            title={expense.title}
+            amount={expense.amount}
+            date={expense.date}
+          />
+        ))}
+        {/* {props.expenses.map(function (obj, i) {
+          return (
+            <ExpenseItem
+              title={props.expenses[i].title}
+              amount={props.expenses[i].amount}
+              date={props.expenses[i].date}
+            />
+          );
+        })} */}
+      </Card>
+    </div>
+  );
+};
+export default Expenses;
+#end_src
