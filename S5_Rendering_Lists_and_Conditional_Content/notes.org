@@ -232,3 +232,85 @@ export default Expenses;
         />
         {expensesContent}
 #+end_src
+
+* Adding Conditional Return Statements
+
+- before we continue, let's extract the list logic into a new component, to make the Expenses component leaner. Let's create a new component called ~ExpensesList.js~
+
+#+begin_src js
+import ExpenseItem from './ExpenseItem';
+
+const ExpensesList = (props) => {
+  let expensesContent = <p>No expenses found!</p>;
+  if (props.items.length > 0) {
+    expensesContent = props.items.map((expense) => (
+      <ExpenseItem
+        key={expense.id}
+        title={expense.title}
+        amount={expense.amount}
+        date={expense.date}
+      />
+    ));
+  }
+};
+
+export default ExpensesList
+#+end_src
+
+- And now we will import this into ~Expenses~ and pass in our ~filteredExpenses~ list
+
+#+begin_src js
+import { useState } from 'react';
+
+import ExpensesFilter from './ExpensesFilter';
+import Card from '../UI/Card';
+import './Expenses.css';
+import ExpensesList from './ExpensesList';
+
+const Expenses = (props) => {
+  const [filteredYear, setFilteredYear] = useState('2020');
+  const filterChangeHandler = (selectedYear) => {
+    setFilteredYear(selectedYear);
+  };
+
+  const filteredExpenses = props.items.filter((expense) => {
+    return expense.date.getFullYear().toString() === filteredYear;
+  });
+
+  return (
+    <div>
+      <Card className='expenses'>
+        <ExpensesFilter
+          selected={filteredYear}
+          onChangeFilter={filterChangeHandler}
+        />
+        <ExpensesList items={filteredExpenses} />
+#+end_src
+
+- back inside of our ~ExpensesList~, we will return an unordered list and rework the logic a little bit
+
+#+begin_src js
+import ExpenseItem from './ExpenseItem';
+import './ExpensesList.css';
+
+const ExpensesList = (props) => {
+  if (props.items.length === 0) {
+    return <h2 className='expenses-list__fallback'>Found no expenses</h2>;
+  }
+
+  return (
+    <ul className='expenses-list'>
+      {props.items.map((expense) => (
+        <ExpenseItem
+          key={expense.id}
+          title={expense.title}
+          amount={expense.amount}
+          date={expense.date}
+        />
+      ))}
+    </ul>
+  );
+};
+
+export default ExpensesList;
+#+end_src
