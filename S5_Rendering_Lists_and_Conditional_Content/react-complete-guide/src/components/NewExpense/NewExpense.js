@@ -15,6 +15,10 @@ const NewExpense = (props) => {
     props.onAddExpense(expenseData);
   };
 
+  const formVisibiliyChange = () => {
+    setFormVisibility(false);
+  };
+
   const clickHandler = () => {
     setFormVisibility(true);
     console.log(isFormVisible);
@@ -24,7 +28,10 @@ const NewExpense = (props) => {
     <div className='new-expense'>
       {!isFormVisible && <button onClick={clickHandler}>Add Expense</button>}
       {isFormVisible && (
-        <ExpenseForm onSaveExpenseData={saveExpenseDataHandler} />
+        <ExpenseForm
+          onSaveExpenseData={saveExpenseDataHandler}
+          onVisibilityChange={formVisibiliyChange}
+        />
       )}
     </div>
   );
