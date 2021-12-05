@@ -249,3 +249,27 @@ export default App;
 - now we just need access to the values, which is what we'll do in the next section
 
 * Extracting Route Params
+
+- react router has the ~useParams~ component. Let's use that inside ~ProductDetail~
+
+#+begin_src js
+// ProductDetail.js
+import { useParams } from 'react-router';
+
+const ProductDetail = () => {
+  const params = useParams();
+
+  console.log(params.productId);
+
+  return (
+    <section>
+      <h1>Product Detail</h1>
+      <p>{params.productId}</p>
+    </section>
+  );
+};
+
+export default ProductDetail;
+#+end_src
+
+- whatever unique identifier we enter in the URL, it will be outputted onto the screen. For example, /http://localhost:3000/product-detail/test/ will output ~test~ on the screen
