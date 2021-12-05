@@ -144,3 +144,50 @@ const MainHeader = () => {
 
 export default MainHeader;
 #+end_src
+
+* Using Navlinks
+
+- when we have a navbar, we would want to highlight the active link
+- in order to do so, react router has a feature that helps us. We can use the ~NavLink~ component. It works like ~Link~ but it also adds a CSS class. We need to specify what link it should be. We do this with the ~activeClassName~ prop
+
+#+begin_src js
+// MainHeader.js
+import { NavLink } from 'react-router-dom';
+
+import classes from './MainHeader.module.css';
+
+const MainHeader = () => {
+  return (
+    <header className={classes.header}>
+      <nav>
+        <ul>
+          <li>
+            <NavLink activeClassName={classes.active} to='/welcome'>
+              Welcome
+            </NavLink>
+          </li>
+          <li>
+            <NavLink ctiveClassName={classes.active} to='/products'>
+              Products
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+};
+
+export default MainHeader;
+#+end_src
+
+- now in our new CSS file, we need to add the active class
+
+#+begin_src css
+.header a:hover,
+.header a:active,
+.header a.active {
+  color: #95bcf0;
+  padding-bottom: 0.25rem;
+  border-bottom: 4px solid #95bcf0;
+}
+#+end_src
