@@ -1,0 +1,832 @@
+#+TITLE: Section 3: React Basics and Working With Components
+#+AUTHOR: Brian E. Nguyen
+
+* Module Introduction
+
+We will learn how to use everything that makes up React
+- React Core Syntax & JSX
+- Work with components
+- Work with data
+
+* What Are Components? And Why is React All About them?
+
+- React is a JavaScript library for building user interfaces
+- HTML/CSS/JS are about building user interfaces as well
+- We use libraries like React _to simplify building user interfaces_
+  + This is through the use of *components*
+
+- All user interfaces in the end are made up of components
+
+[[../S3_React_Basics_and_Components/img-for-notes/img1.png]]
+
+- in this picture, these components are the same; they are just reused twice
+- *components* _are reusable building blocks in your user interface_
+  - though you don't have to reuse components
+- components are made up of HTML for text, CSS for styling, and possibly JS for logic
+- React embraces the concept of components because of
+  1. Resusablility - not repeating yourself
+  2. Separation of concerns - keeping code base small and manageable. Don't do too many things in one and the same place
+
+* React Code is Written in a "Declarative Way"
+
+** How exactly is a component built?
+- in the end, components are built with HTML, CSS, and JS, then we combine the components to build a user interface
+- mostly, they're about HTML and JS; CSS could be a factor but it's not too important
+
+** The Declarative Approach
+- React allows you to create *reusable and reactive components* consisting of *HTML and JavaScript* (and CSS)
+- React is built using the *declarative approach*, which means that you should not tell React that a certain HTML element should be created and inserted in a specific place on the UI
+  - instead, you will always define the desired target state(s) and let React figure out the actual JavaScript DOM instructions
+- in the end, _we are essentially building our own custom HTML elements_
+
+* Creating a New Project
+** Preface
+- the easiest way to create a React app is through this GitHub Repo
+  - https://github.com/facebook/create-react-app
+- this has preconfigured folders with basic React code files
+- the ~create-react-app~ tool creates a development environment for our app
+
+- You can also visit this site to view the documentation:
+  - https://reactjs.org/
+
+- Make sure you have Node JS installed on your machine
+
+** Creating the Project / Starting the Dev Server
+Run these commands in your terminal:
+
+#+begin_src
+npx create-react-app react-complete-guide
+cd my-app
+npm start
+#+end_src
+
+After the project is created, ~cd~ into the project and run ~npm start~. The application will automatically load up a preview of our app on ~localhost:3000~
+
+** The Application
+You should see something like this in your application:
+
+[[../S3_React_Basics_and_Components/img-for-notes/img2.png]]
+
+These files might change overtime, but just know that you should have a ~src~ folder and a ~package.json~ file. You should also delete all files in the ~src~ folder except for the following:
+
+- App.js
+- index.css
+- index.js
+
+Inside each of these files, replace their code [[https://github.com/academind/react-complete-guide-code/tree/03-react-basics-working-with-components/code/01-starting-setup/src][with the ones on this repo]]. The reason is that this version is the original one that is created with ~create-react-app~. Just to be sure that the packages are updated, run ~npm i~ in your terminal.
+
+* Analyzing a Standard React Project
+
+Let's have a look at the ~src~ folder because that is where we will spend the majority of our time
+
+[[../S3_React_Basics_and_Components/img-for-notes/img3.png]]
+
+- the most important takeaway: /React code is just JavaScript code/
+
+** ~index.js~
+*** General Overview
+- let's start with the ~index.js~ file
+
+#+begin_src javascript
+import ReactDOM from "react-dom";
+
+import "./index.css";
+import App from "./App";
+
+ReactDOM.render(<App />, document.getElementById("root"));
+#+end_src
+
+- this file is the first one that is executed whenever the page is loaded
+- we will write code that's easy to read and has syntactic sugar, but this kind would actually run in the browser
+- the ~npm start~ command will take our code and transform it before it is delivered to the browser
+  - an example is ~import "./index.css"~, because that's not actual JavaScript. You can't import CSS into JS
+- another example of invalid JS is ~<App />~
+
+*** The React DOM
+- in this file, we are importing /ReactDOM/ from ~react-dom~
+- also, in the ~package.json~ file, you would see two dependencies: ~react~ and ~react-dom~
+
+[[../S3_React_Basics_and_Components/img-for-notes/img4.png]]
+
+- while technically these are two separate packages, these incompass the React library
+
+*** The ~render~ Method
+#+begin_src javascript
+ReactDOM.render(<App />, document.getElementById("root"));
+#+end_src
+- the ~render~ method takes two arguments
+
+**** The App Component
+
+The ~App~ component is the main component that encompasses all other components
+
+#+begin_src javascript
+function App() {
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+In this, we are returning HTML code inside of a JavaScript file. This is a feature called *JSX*
+
+**** The ~root~ Element DOM API
+
+the default JavaScript DOM API. It calls the ~root~ ID inside of the /public/index.html/ file, which is the actual file that's is used to display our React code
+
+This is what it looks like in the ~index.html~ file
+#+begin_src html
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    ...
+#+end_src
+
+* Introducing JSX
+
+- JSX stands for /JavaScript XML/
+- the ~npm start~ command transforms our React code into browser-friendly code. This is what it looks like in the browser:
+
+[[../S3_React_Basics_and_Components/img-for-notes/img5.png]]
+
+- inside of the ~main.chunk.js~ file, we see a function called ~App~
+
+  #+begin_src javascript
+function App() {
+  return /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("div", {
+    children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxDEV"])("h2", {
+      children: "Let's get started!"
+    }, void 0, false, {
+      fileName: _jsxFileName,
+      lineNumber: 4,
+      columnNumber: 7
+    }, this)
+  }, void 0, false, {
+    fileName: _jsxFileName,
+    lineNumber: 3,
+    columnNumber: 5
+  }, this);
+}
+  #+end_src
+
+- this is the transformed code that runs in the browser
+
+* How React Works
+
+#+begin_src javascript
+function App() {
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- we have HTML code inside of ~App()~
+- we can build our custom HTML elements with React
+- if we make changes to our JSX code while the development server is running, then those changes will automatically update in the browser
+
+* Building a First Custom Component
+
+- it is best practice to put components into their own files, so you have one file per component
+- React projects have dozens and hundreds of components in the end, /and that's completely normal/
+- inside of the /src/ folder, let's create a /components/ folder to hold our components source files
+  + we don't put ~App.js~ inside of it because it's a special type of component
+- in the end, we are building a component tree
+
+[[../S3_React_Basics_and_Components/img-for-notes/img6.png]]
+
+1. let's add a new file inside of /components/ folder called ~ExpenseItem.js~
+   + it's a React convention to name files starting with a capital character, and every sub-word starts with a captial letter
+   + keep in mind that _a React component is just a JavaScript function_
+2. lets's write our ~ExpenseItem()~ function in our ~ExpenseItem.js~
+
+#+begin_src javascript
+const ExpenseItem = () => {
+  return <h2>Expense Item!</h2>;
+};
+
+export default ExpenseItem;
+#+end_src
+
+3. after we are done with our function, we need to write an export statement
+4. we will then import that component in ~App.js~ and use it
+
+#+begin_src javascript
+import ExpenseItem from "./components/ExpenseItem";
+
+function App() {
+ return (
+    <div>
+      <h2>Let's get started!</h2>
+        <ExpenseItem></ExpenseItem>
+    </div>
+  );
+}
+export default App;
+#+end_src
+
+[[../S3_React_Basics_and_Components/img-for-notes/img7.png]]
+
+* Writing More Complex JSX Code
+
+- let's tweak the HTML code in the ~ExpenseItem()~ function
+- what if we want to add a title, amount, and the date?
+- we can only have 1 root element inside of our function
+- if we need multiple HTML elements in our function, then we need to surround them inside parentheses
+
+#+begin_src javascript
+const ExpenseItem = () => {
+	return (
+		<div>
+			<div>Date</div>
+			<div>
+				<h2>Title</h2>
+				<div>Amount</div>
+			</div>
+		</div>
+	);
+};
+
+export default ExpenseItem;
+#+end_src
+
+* Adding Basic Styling
+
+- we still use CSS for styling, but there's nothing "React-specific" about it
+- to add CSS to a component, we would first need to create a CSS file that has the same name as the component
+  + in this case, it would be ~ExpenseItem.css~
+- [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/ExpenseItem.css][the code is provided at this link]]
+- back in ~ExpenseItem.js~, we will import the CSS
+
+  #+begin_src javascript
+// ExpenseItem.js
+import "./ExpenseItem.css";
+
+const ExpenseItem = () => {
+  return (
+      <div>
+        <div>Date</div>
+      <div>
+        <h2>Title</h2>
+        <div>Amount</div>
+      </div>
+    </div>
+	);
+};
+
+export default ExpenseItem;
+
+#+end_src
+
+- when we work with adding classes to elements, /we don't use/ ~class~, /but rather/ ~className~
+- it's strange, but keep in mind that the code inside of our function is not really HTML
+  + this is JSX syntax invented by the React team
+  + under the hood, it's still JavaScript code
+- let's add the classes to the JSX code
+
+#+begin_src javascript
+import "./ExpenseItem.css";
+
+const ExpenseItem = () => {
+  return (
+    <div className='expense-item'>
+      <div>March 28th 2021</div>
+      <div className='expense-item__description'>
+        <h2>Car Insurance</h2>
+        <div className='expense-item__price'>$297.48</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+[[../S3_React_Basics_and_Components/img-for-notes/img8.png]]
+
+* Outputting Dynamic Data & Working with Expressions in JSX
+
+- we won't have just one expense, but many, and where the data is not hardcoded
+- let's create some temporary variables to output data inside of our ~ExpenseItem.js~
+
+#+begin_src javascript
+// ExpenseItem.js
+import "./ExpenseItem.css";
+
+const ExpenseItem = () => {
+  // Note: months start at 0
+  const expenseDate = new Date(2021, 2, 28);
+  const expenseTitle = "Car Insurance";
+  const expenseAmount = 297.48;
+  return (
+    <div className='expense-item'>
+      <div>March 28th 2021</div>
+      <div className='expense-item__description'>
+        <h2>Car Insurance</h2>
+        <div className='expense-item__price'>$297.48</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- you can replace hardcoded data with open and closing curly braces
+- inside of the curly braces you can run basic JavaScript expressions, like ~1+1~
+- let's insert our variables into the curly brackets
+
+#+begin_src javascript
+import "./ExpenseItem.css";
+
+const ExpenseItem = () => {
+  // Note: months start at 0
+  // Date object is not a string
+  const expenseDate = new Date(2021, 2, 28);
+  const expenseTitle = "Car Insurance";
+  const expenseAmount = 297.48;
+  return (
+    <div className='expense-item'>
+      <div>{expenseDate.toISOString()}</div>
+      <div className='expense-item__description'>
+        <h2>{expenseTitle}</h2>
+        <div className='expense-item__price'>${expenseAmount}</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+[[../S3_React_Basics_and_Components/img-for-notes/img9.png]]
+
+* Passing Data via "Props"
+
+- how can we make the ~ExpenseItem~ component reusable?
+  + in ~App.js~ we can just copy the component multiple times, but they all output the same data
+- let's create data outside of our ~ExpenseItem~ component
+  + [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/expenses.txt][insert this data inside of your ~App.js~ component]]i
+
+#+begin_src javascript
+// App.js
+import ExpenseItem from "./components/ExpenseItem";
+
+function App() {
+  const expenses = [
+    {
+      id: "e1",
+      title: "Toilet Paper",
+      amount: 94.12,
+      date: new Date(2020, 7, 14),
+    },
+    { id: "e2", title: "New TV", amount: 799.49, date: new Date(2021, 2, 12) },
+    {
+      id: "e3",
+      title: "Car Insurance",
+      amount: 294.67,
+      date: new Date(2021, 2, 28),
+    },
+    {
+      id: "e4",
+      title: "New Desk (Wooden)",
+      amount: 450,
+      date: new Date(2021, 5, 12),
+    },
+  ];
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+      <ExpenseItem></ExpenseItem>
+      <ExpenseItem></ExpenseItem>
+      <ExpenseItem></ExpenseItem>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- we can pass in custom attributes in our components
+- we can also pass in more than 1 attribute to a component
+
+#+begin_src javascript
+import ExpenseItem from "./components/ExpenseItem";
+
+function App() {
+  const expenses = [
+    {
+      id: "e1",
+      title: "Toilet Paper",
+      amount: 94.12,
+      date: new Date(2020, 7, 14),
+    },
+    { id: "e2", title: "New TV", amount: 799.49, date: new Date(2021, 2, 12) },
+    {
+      id: "e3",
+      title: "Car Insurance",
+      amount: 294.67,
+      date: new Date(2021, 2, 28),
+    },
+    {
+      id: "e4",
+      title: "New Desk (Wooden)",
+      amount: 450,
+      date: new Date(2021, 5, 12),
+    },
+  ];
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+      <ExpenseItem
+        title={expenses[0].title}
+        amount={expenses[0].amount}
+        date={expenses[0].date}
+      ></ExpenseItem>
+      <ExpenseItem
+        title={expenses[1].title}
+        amount={expenses[1].amount}
+        date={expenses[1].date}
+      ></ExpenseItem>
+      <ExpenseItem
+        title={expenses[2].title}
+        amount={expenses[2].amount}
+        date={expenses[2].date}
+      ></ExpenseItem>
+      <ExpenseItem
+        title={expenses[3].title}
+        amount={expenses[3].amount}
+        date={expenses[3].date}
+      ></ExpenseItem>
+    </div>
+  );
+}
+
+export default App;
+
+#+end_src
+
+- now we need to output the data inside ~ExpenseItem.js~ because it's still showing the hardcoded data
+- we would need to pass in the data as a parameter in the function
+- you would think the function would look like this:
+
+#+begin_src javascript
+const ExpenseItem = (title, amount, date) => {
+...
+}
+#+end_src
+
+- but in reality, we don't do this. We only pass in one parameter, and you can name this whatever you want. Typically, it would be named ~props~ to make it clear that this is the object that holds our data
+  + the keys are the names of the attributes that we pass in, and the values use the values' names
+#+begin_src javascript
+// ExpenseItem.js
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <div className='expense-item'>
+      <div>{props.date.toISOString()}</div>
+      <div className='expense-item__description'>
+        <h2>{props.title}</h2>
+        <div className='expense-item__price'>${props.amount}</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+[[../S3_React_Basics_and_Components/img-for-notes/img10.png]]
+
+* Adding "normal" JavaScript Logic to Components
+
+- we will fix the JSX code so that the app is more human-readable
+- we have our date object. If we just want to output specific parts of the date, then we can use the ~.toLocaleString()~, which helps with outputting the date in readable format
+  + this methods takes in 2 parameters
+    1. location
+    2. the format of the date
+
+#+begin_src javascript
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  const month = props.date.toLocaleString("en-US", { month: "long" });
+  const day = props.date.toLocaleString("en-US", { day: "2-digit" });
+  const year = props.date.getFullYear();
+
+  return (
+    <div className='expense-item'>
+      <div>
+        <div>{month}</div>
+        <div>{day}</div>
+        <div>{year}</div>
+      </div>
+      <div className='expense-item__description'>
+        <h2>{props.title}</h2>
+        <div className='expense-item__price'>${props.amount}</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- /tip:/ it's good practice to do data extraction before you place them inside the JSX code
+
+* Splitting Components into Multiple Components
+
+- as you work on your React components, the components will become bigger and bigger, which is natural
+- React allows you to split your application into smaller building blocks with components
+- we can treat the date display JSX as its own separate component; there is no hard rule to determine what can be a component and what couldn't
+- let's create a new component called ~ExpenseDate.js~ and take the date stuff and put it into this new component
+
+#+begin_src javascript
+// ExpenseDate.js
+const ExpenseDate = (props) => {
+  const month = props.date.toLocaleString("en-US", { month: "long" });
+  const day = props.date.toLocaleString("en-US", { day: "2-digit" });
+  const year = props.date.getFullYear();
+
+  return (
+    <div>
+      <div>{month}</div>
+      <div>{day}</div>
+      <div>{year}</div>
+    </div>
+  );
+};
+
+export default ExpenseDate;
+#+end_src
+
+- when we use our custom components, if there is no content between the opening and closing tags, then we can write our components in this format:
+
+#+begin_src html
+<ExpenseDate />
+#+end_src
+
+- now we need to pass in props for our ~ExpenseDate~ component
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <div className='expense-item'>
+      <ExpenseDate date={props.date}/>
+      <div className='expense-item__description'>
+        <h2>{props.title}</h2>
+        <div className='expense-item__price'>${props.amount}</div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- let's add some styling with an ExpenseDate.css file [[https://github.com/academind/react-complete-guide-code/blob/03-react-basics-working-with-components/extra-files/ExpenseDate.css][using the code from this link]]
+
+* Assignment 1: Practice React & Component Basics
+
+The goal of this assignment is to take all of the ~ExpenseItem~ components and move them into a single component called ~Expenses~
+
+My solution:
+
+#+begin_src javascript
+// App.js
+import Expenses from "./components/Expenses";
+
+function App() {
+  const expenses = [
+    {
+      id: "e1",
+      title: "Toilet Paper",
+      amount: 94.12,
+      date: new Date(2020, 7, 14),
+    },
+    { id: "e2", title: "New TV", amount: 799.49, date: new Date(2021, 2, 12) },
+    {
+      id: "e3",
+      title: "Car Insurance",
+      amount: 294.67,
+      date: new Date(2021, 2, 28),
+    },
+    {
+      id: "e4",
+      title: "New Desk (Wooden)",
+      amount: 450,
+      date: new Date(2021, 5, 12),
+    },
+  ];
+  return <Expenses expenses={expenses} />;
+}
+
+export default App;
+#+end_src
+
+#+begin_src javascript
+// Expenses.js
+import ExpenseItem from "./ExpenseItem";
+import "./Expenses.css";
+const Expenses = (props) => {
+  return (
+    <div className='expenses'>
+      {props.expenses.map(function (obj, i) {
+        return (
+          <ExpenseItem
+            title={props.expenses[i].title}
+            amount={props.expenses[i].amount}
+            date={props.expenses[i].date}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+export default Expenses;
+#+end_src
+
+* The Concept of "Composition" ("children props")
+
+- *composition* - building a user interface from smaller building blocks
+- what if we wanted to have a component that doesn't involve using props; rather, we can pass in content between the open and closing element brackets?
+
+[[../S3_React_Basics_and_Components/img-for-notes/img11.png]]
+
+- we can extract the rounded corners and the drop shadows styles that are used for the ~ExpenseItem~ and ~Expenses~ components, into a separate component
+- let's name the component ~Card~ and create a CSS file for it
+  + generally in web dev, a /card/ refers to a container
+
+#+begin_src javascript
+import "./Card.css";
+
+const Card = () => {
+  return <div className="card"></div>;
+};
+
+export default Card;
+#+end_src
+
+- inside of ~Expenses.css~, we will extract the ~border-radius~ and ~box-shadow~ styles from the ~.expenses~ class
+  + we will then put those styles inside of ~Card.css~ in a new class called ~.card~
+
+#+begin_src css
+/* Card.css */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+}
+#+end_src
+
+- we also want to go to ~ExpenseItem.css~ and remove the ~box-shadow~ and ~border-radius~ styles
+- now inside of our ~ExpenseItem.js~, we will import ~Card~ and replace the root ~<div>~ tag with it
+
+#+begin_src javascript
+import ExpenseDate from "./ExpenseDate";
+import Card from "./Card";
+import "./ExpenseItem.css";
+
+const ExpenseItem = (props) => {
+  return (
+    <Card className="expense-item">
+      <ExpenseDate date={props.date} />
+      <div className="expense-item__description">
+        <h2>{props.title}</h2>
+        <div className="expense-item__price">${props.amount}</div>
+      </div>
+    </Card>
+  );
+};
+
+export default ExpenseItem;
+#+end_src
+
+- now having content between the tags /doesn't work just yet/
+- in ~Card.js~, we want to accept props. We will use a special kind of prop that is used inside every component
+  + this is called ~props.children~. This is all of the content that is between the opening and closing tags
+
+#+begin_src javascript
+import "./Card.css";
+
+const Card = (props) => {
+  return <div className="card">{props.children}</div>;
+};
+
+export default Card;
+#+end_src
+
+- we got some content back, but it's also a bit broken
+
+[[../S3_React_Basics_and_Components/img-for-notes/img12.png]]
+
+- the reason is that some styles are missing. We would want to tweak the code in the ~Card~ component
+
+#+begin_src javascript
+import "./Card.css";
+
+const Card = (props) => {
+  const classes = "card " + props.className;
+  return <div className={classes}>{props.children}</div>;
+};
+
+export default Card;
+#+end_src
+
+- we added a new constant called ~classes~ so that any class received from outside will be added to the "card " string
+  + /note:/ ~props.className~ has the value of ~expense-item~
+- we can also use our ~Card~ component inside of ~Expenses~
+
+#+begin_src javascript
+import ExpenseItem from "./ExpenseItem";
+import Card from "./Card";
+import "./Expenses.css";
+
+const Expenses = (props) => {
+  return (
+    <Card className="expenses">
+      {props.expenses.map(function (obj, i) {
+        return (
+          <ExpenseItem
+            title={props.expenses[i].title}
+            amount={props.expenses[i].amount}
+            date={props.expenses[i].date}
+          />
+        );
+      })}
+    </Card>
+  );
+};
+
+export default Expenses;
+#+end_src
+
+
+[[../S3_React_Basics_and_Components/img-for-notes/img13.png]]
+
+- what's the purpose of doing all of this?
+  + we were able to extract some code duplication
+  + there will be more complex wrappers later in the course
+  + this helps with composition
+
+* A First Summary
+
+- you build user interfaces by combining components
+- we split our code through multiple building blocks
+- we are also able to pass in props to our components
+
+* A Closer Look at JSX
+
+- the JSX code that is then transformed into code that the browser can read is unreadable for humans
+- we have two dependencies inside ~package.json~: ~react~ and ~react-dom~
+- we use ~react-dom~ inside of ~index.js~, but we never use ~react~ anywhere
+  + this is because in older versions of React, you would need to import ~react~ in every file where you use JSX
+
+#+begin_src html
+<div>
+    <h2>Let's get started!</h2>
+    <Expenses expenses={expenses} />
+ </div>
+#+end_src
+
+- let's take this JSX code and see what it looks like in plain JavaScript
+
+#+begin_src javascript
+ return React.createElement(
+    "div",
+    {},
+    React.createElement("h2", {}, "Let's get started!"),
+    React.createElement(Expenses, { expenses: expenses })
+  );
+#+end_src
+
+- this ~createElement~ method takes in three arguments:
+  1. the HTML element to be created
+  2. an object that sets the attributes of the element
+  3. the content between the opening and closing tags. You can have infinite arguments after that for any content
+- this is the under-the-hood code that gets created
+
+* Organizing Component Files
+
+- right now our /components/ folder is messy
+
+[[../S3_React_Basics_and_Components/img-for-notes/img14.png]]
+
+- we can create folders based on the components' purpose. We will create folders called /UI/ and /Expenses/, and then move our files into there
+- we would also need to update the paths for the files too
+
+** File Paths
+- ~./~ means you are referencing a file in the same directory as the current file
+- ~../~ means you are referencing a file outside of the current directory
