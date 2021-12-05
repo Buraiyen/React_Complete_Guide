@@ -1,0 +1,69 @@
+#+TITLE: Section 20 - React Router
+
+* Defining and Using Routes
+
+- to install the router, run the following code:
+
+  ~npm i react-router-dom@5~
+
+  This ensures that the version is v5
+
+- let's import the router to ~App~
+
+#+begin_src js
+import { Route } from 'react-router-dom';
+
+function App() {
+  return (
+    <div>
+      <h2>Let's get started!</h2>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- now let's add some components. We will add ~Welcome.js~ and ~Products.js~
+- then we will use the ~Route~ component to render the pages. This needs a special prop called ~path~, which takes in the value of the URL. Inside of the ~Route~ component would be the component that we will render
+
+#+begin_src js
+// App.js
+import { Route } from 'react-router-dom';
+
+import Welcome from './components/Welcome';
+import Products from './components/Products';
+
+function App() {
+  return (
+    <div>
+      <Route path='/welcome'>
+        <Welcome />
+      </Route>
+      <Route path='/products'>
+        <Products />
+      </Route>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- to actually make the routes work, we would need to go into ~index.js~ and add a special component called ~BrowserRouter~
+
+#+begin_src js
+// index.js
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+
+import './index.css';
+import App from './App';
+
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('root')
+);
+#+end_src
