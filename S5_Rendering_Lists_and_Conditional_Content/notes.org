@@ -476,3 +476,36 @@ const ExpenseForm = (props) => {
 
 export default ExpenseForm;
 #+end_src
+
+* Demo App: Adding a chart
+
+- the core features are added, but we still have one missing thing: the chart
+- to start, we will add a new components folder called ~Chart~ and add the components ~Chart~ and ~ChartBar~ inside of them. The CSS files are included
+
+#+begin_src js
+// Chart.js
+
+import ChartBar from './ChartBar';
+import './Chart.css';
+
+const Chart = (props) => {
+  return (
+    <div className='chart'>
+      {props.dataPoints.map((dataPoint) => (
+        <ChartBar
+          key={dataPoint.id}
+          value={dataPoint.value}
+          maxValue={null}
+          label={dataPoint.label}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default Chart;
+#+end_src
+
+* Adding Dynamic styles
+
+- let's now add code to ~ChartBar~
