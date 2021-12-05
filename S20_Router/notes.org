@@ -67,3 +67,80 @@ ReactDOM.render(
   document.getElementById('root')
 );
 #+end_src
+
+* Working With Links
+
+- Right now we have one issue: we can only change routes through the URL
+- let's create a new folder called *views* and put our views in it
+- let's create a component called ~MainHeader.js~ and have this, and then we will import this into ~App.js~
+
+#+begin_src js
+const MainHeader = () => {
+  return (
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href='/welcome'>Welcome</a>
+          </li>
+          <li>
+            <a href='/products'>Products</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+};
+#+end_src
+
+#+begin_src js
+// App.js
+import { Route } from 'react-router-dom';
+
+import Welcome from './views/Welcome';
+import Products from './views/Products';
+import MainHeader from './components/MainHeader';
+
+function App() {
+  return (
+    <div>
+      <MainHeader />
+      <Route path='/welcome'>
+        <Welcome />
+      </Route>
+      <Route path='/products'>
+        <Products />
+      </Route>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- this works fine, but it has one big flaw. Whenever we click on a new page, we see the refresh button turn into a cross. This means that we are sending a request to load a page. We are leaving the SPA because of this
+- there is another component that we can import from ~react-router-dom~ called ~Link~. This allows us to create a link. We can replace the anchor tags with the ~Link~ component, and replace ~href~ with ~to~
+
+#+begin_src js
+// MainHeader.js
+import { Link } from 'react-router-dom';
+
+const MainHeader = () => {
+  return (
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <Link to='/welcome'>Welcome</Link>
+          </li>
+          <li>
+            <Link to='/products'>Products</Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+};
+
+export default MainHeader;
+#+end_src
