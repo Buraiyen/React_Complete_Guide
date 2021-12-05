@@ -118,6 +118,8 @@ function App() {
 export default App;
 #+end_src
 
+[[./img-for-notes/img1.png][img1]]
+
 - this works fine, but it has one big flaw. Whenever we click on a new page, we see the refresh button turn into a cross. This means that we are sending a request to load a page. We are leaving the SPA because of this
 - there is another component that we can import from ~react-router-dom~ called ~Link~. This allows us to create a link. We can replace the anchor tags with the ~Link~ component, and replace ~href~ with ~to~
 
@@ -191,3 +193,59 @@ export default MainHeader;
   border-bottom: 4px solid #95bcf0;
 }
 #+end_src
+
+[[./img-for-notes/img2.png]]
+
+* Adding Dynamic Routes with Params
+
+- Let's add a list of products to our ~Products~
+
+[[./img-for-notes/img3.png]]
+
+- let's make it so that the products are clickable and that it takes us to a new page for that specific product. We will create a ~ProductDetails.js~ view
+#+begin_src js
+const ProductDetail = () => {
+  <section>
+    <h1>Product Detail</h1>
+  </section>;
+};
+
+export default ProductDetail;
+
+#+end_src
+- we will have to define *dynamic routes*
+
+,#+begin_src js
+// App.js
+import { Route } from 'react-router-dom';
+
+import Welcome from './views/Welcome';
+import Products from './views/Products';
+import ProductDetail from './views/ProductDetail';
+import MainHeader from './components/MainHeader';
+
+function App() {
+  return (
+    <div>
+      <MainHeader />
+      <main>
+        <Route path='/welcome'>
+          <Welcome />
+        </Route>
+        <Route path='/products'>
+          <Products />
+        </Route>
+        <Route path='/product-detail/:productId'>
+          <ProductDetail />
+        </Route>
+      </main>
+    </div>
+  );
+}
+
+export default App;
+#+end_src
+
+- now we just need access to the values, which is what we'll do in the next section
+
+* Extracting Route Params
