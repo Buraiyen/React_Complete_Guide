@@ -1,0 +1,77 @@
+#+TITLE: Styling React components
+
+* Setting Dynamic Inline Styles
+
+- we have a course goals app. We click add our goals and click a button to append that goal to a list. We want it so that we have validatin styles. In the ~CourseInput.js~ component and inside the form handler function, we can have an if statement that checks if the length of input is zero
+
+#+begin_src js
+// CourseInput.js
+ const formSubmitHandler = (event) => {
+    event.preventDefault();
+    if (!enteredValue.trim().length) {
+      return;
+    }
+    props.onAddGoal(enteredValue);
+  };
+#+end_src
+
+- Even though we added this, we didn't give the user any feedback. We should have some styles. We will add a state for it
+
+#+begin_src js
+const [isValid, setIsValid] = useState(true);
+
+return (
+    <form onSubmit={formSubmitHandler}>
+      <div className='form-control'>
+        <label style={{ color: isValid ? 'black' : 'red' }}>Course Goal</label>
+        <input
+          style={{
+            borderColor: isValid ? 'black' : 'red',
+            background: isValid ? 'white' : 'salmon',
+          }}
+          type='text'
+          onChange={goalInputChangeHandler}
+        />
+        </div>
+      <Button type='submit'>Add Goal</Button>
+    </form>
+  );
+#+end_src
+
+- having inline styles is not good practice since they take the highest priority in CSS
+
+* Setting CSS Classes Dynamically
+
+ - we will add a new class inside of ~CourseInput.css~ for invalid styles
+
+#+begin_src css
+.form-control.invalid input {
+  border-color: red;
+  background: salmon;
+}
+
+.form-control.invalid label {
+  color: red;
+}
+#+end_src
+
+- in our JSX, we will put string-template literals for dynamic classes
+
+#+begin_src js
+return (
+    <form onSubmit={formSubmitHandler}>
+      <div className={`form-control ${!isValid ? 'invalid' : ''}`}>
+        <label style={{ color: isValid ? 'black' : 'red' }}>Course Goal</label>
+        <input
+          style={{
+            borderColor: isValid ? 'black' : 'red',
+            background: isValid ? 'white' : 'salmon',
+          }}
+          type='text'
+          onChange={goalInputChangeHandler}
+        />
+      </div>
+      <Button type='submit'>Add Goal</Button>
+    </form>
+  );
+#+end_src
