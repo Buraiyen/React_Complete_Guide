@@ -75,3 +75,48 @@ return (
     </form>
   );
 #+end_src
+
+* Styled Components
+
+- we are using regular CSS files and importing them to the components, _but this does not result in those files being scoped to that component only_. This is bad when projects scale larger
+
+- approach number 1 is a package called ~Styled Components~
+
+~npm i --save styled-component~
+
+- let's style our button component. We see a strange usage of backticks. Just note that what you pass inside will end up in the ~button~ method, which is the styles. you will get rid of any selectors. For pseudoselectors, use the `&` sign
+
+#+begin_src js
+import styled from 'styled-components';
+
+const Button = styled.button`
+  font: inherit;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #8b005d;
+  color: white;
+  background: #8b005d;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover,
+  &:active {
+    background: #ac0e77;
+    border-color: #ac0e77;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
+  }
+`;
+
+// const Button = props => {
+//   return (
+//     <button type={props.type} className="button" onClick={props.onClick}>
+//       {props.children}
+//     </button>
+//   );
+// };
+
+export default Button;
+#+end_src
