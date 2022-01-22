@@ -120,3 +120,112 @@ const Button = styled.button`
 
 export default Button;
 #+end_src
+
+* Styled Components and Dynamic Props
+
+- we will create a new component in the ~CourseInput.js~ file and import all the styles to it
+
+#+begin_src js
+const FormControl = styled.div`
+  margin: 0.5rem 0;
+
+  & label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  & input {
+    display: block;
+    width: 100%;
+    border: 1px solid #ccc;
+    font: inherit;
+    line-height: 1.5rem;
+    padding: 0 0.25rem;
+  }
+
+  & input:focus {
+    outline: none;
+    background: #fad0ec;
+    border-color: #8b005d;
+  }
+
+  &.invalid input {
+    border-color: red;
+    background: salmon;
+  }
+
+  &.invalid label {
+    color: red;
+  }
+`;
+
+return (
+    <form onSubmit={formSubmitHandler}>
+      <FormControl className={!isValid && 'invalid'}>
+        <label>Course Goal</label>
+        <input type='text' onChange={goalInputChangeHandler} />
+      </FormControl>
+      <Button type='submit'>Add Goal</Button>
+    </form>
+  );
+#+end_src
+
+- we can also use props to change styles dynamically
+
+#+begin_src js
+return (
+    <form onSubmit={formSubmitHandler}>
+      <FormControl invalid={!isValid}>
+        <label>Course Goal</label>
+        <input type='text' onChange={goalInputChangeHandler} />
+      </FormControl>
+      <Button type='submit'>Add Goal</Button>
+    </form>
+  );
+#+end_src
+
+- back in the styles, we can add JS logic since it's in backticks
+
+#+begin_src js
+
+  & input {
+    display: block;
+    width: 100%;
+    border: 1px solid ${(props) => (props.invalid ? 'red' : '#ccc')};
+    font: inherit;
+    line-height: 1.5rem;
+    padding: 0 0.25rem;
+  }
+#+end_src
+
+- below is the full styles
+
+#+begin_src js
+const FormControl = styled.div`
+  margin: 0.5rem 0;
+
+  & label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: ${(props) => (props.invalid ? 'red' : 'black')};
+  }
+
+  & input {
+    display: block;
+    width: 100%;
+    border: 1px solid ${(props) => (props.invalid ? 'red' : '#ccc')};
+    background: ${(props) => (props.invalid ? '#ffd7d7' : 'transparent')};
+    font: inherit;
+    line-height: 1.5rem;
+    padding: 0 0.25rem;
+  }
+
+  & input:focus {
+    outline: none;
+    background: #fad0ec;
+    border-color: #8b005d;
+  }
+`;
+#+end_src
