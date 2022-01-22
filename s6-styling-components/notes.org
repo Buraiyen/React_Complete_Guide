@@ -280,3 +280,23 @@ const Button = (props) => {
 [[./img-for-notes/img1.png]]
 
 - the module takes the class name to be unique
+
+* Dynamic Styles with CSS Modules
+
+- let's add module support to CourseInput
+
+#+begin_src js
+import styles from './CourseInput.module.css';
+
+  return (
+    <form onSubmit={formSubmitHandler}>
+      <div invalid={`${styles['form-control']} ${!isValid && styles.invalid}`}>
+        <label>Course Goal</label>
+        <input type='text' onChange={goalInputChangeHandler} />
+      </div>
+      <Button type='submit'>Add Goal</Button>
+    </form>
+  );
+#+end_src
+
+- let's add the media query in the button CSS file
