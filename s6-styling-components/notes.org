@@ -250,3 +250,33 @@ const Button = styled.button`
     width: auto;
   }
 #+end_src
+
+* Using CSS Modules
+
+- CSS Modules is only available in projects that support it. Let's go to the Button component and comment out the styled component config
+- you have to appened the `.module` to your CSS file
+- you would import the CSS file, but you would import it like this
+
+#+begin_src js
+// `styles` can be whatever name
+import styles from './Button.module.css';
+#+end_src
+
+- this would signal to transform the code so tha CSS modules work
+- now let's dynamically use the class
+
+#+begin_src js
+const Button = (props) => {
+  return (
+    <button type={props.type} className={styles.button} onClick={props.onClick}>
+      {props.children}
+    </button>
+  );
+};
+#+end_src
+
+- if we look at the class name in the dev tools we see this
+
+[[./img-for-notes/img1.png]]
+
+- the module takes the class name to be unique
