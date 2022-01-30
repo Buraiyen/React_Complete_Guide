@@ -40,3 +40,12 @@ SyntaxError: /home/buraiyen/Documents/React_Complete_Guide/S7-Debugging-Apps/rea
 - we can also see the console in the dev tools
 
 [[./img-for-notes/img1.png]]
+
+* Working With breakpoints
+
+- let's say we never seen that warning in the console
+- in dev tools, you can access your files in the `Sources` tab
+- add a breakpoint to the delete function
+- use the tools to go to the next step
+- you can hover over variables to see their value
+- if you click on two goals and see the same ID, then that's how you see there's a problem
