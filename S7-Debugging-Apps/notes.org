@@ -44,8 +44,18 @@ SyntaxError: /home/buraiyen/Documents/React_Complete_Guide/S7-Debugging-Apps/rea
 * Working With breakpoints
 
 - let's say we never seen that warning in the console
-- in dev tools, you can access your files in the `Sources` tab
+- in dev tools, you can access your files in the `Sources` tab (Firefox is `Debugger`)
 - add a breakpoint to the delete function
 - use the tools to go to the next step
 - you can hover over variables to see their value
 - if you click on two goals and see the same ID, then that's how you see there's a problem
+
+* React Dev tools
+
+- when you download react dev tools, you should be able to see these options:
+
+[[./img-for-notes/img2.png]]
+
+- the `Components` tab has all of the React components in the app
+- you can see the props and states inside of components
+- you can also edit the props and state from here
