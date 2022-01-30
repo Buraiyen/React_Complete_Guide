@@ -19,3 +19,24 @@ SyntaxError: /home/buraiyen/Documents/React_Complete_Guide/S7-Debugging-Apps/rea
 #+end_src
 
 - react is wanting us to wrap all elements in one surrounding element
+
+* Analyzing Code Flow and Warnings
+
+- In the project, if we try to delete a goal, then it deletes the one below it
+- let's go to the place where we have the deletion logic, which is on ~App.js~ in the deleteItemHandler function
+- we then see this
+
+#+begin_src js
+ const addGoalHandler = (enteredText) => {
+    setCourseGoals((prevGoals) => {
+      const updatedGoals = [...prevGoals];
+      updatedGoals.unshift({ text: enteredText, id: 'goal1' });
+      return updatedGoals;
+    });
+  };
+#+end_src
+
+- we see that we are hard-coding the ID and making it the same for all goals
+- we can also see the console in the dev tools
+
+[[./img-for-notes/img1.png]]
