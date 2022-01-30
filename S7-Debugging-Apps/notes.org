@@ -1,1 +1,21 @@
 #+TITLE: Section 7: Debugging React Apps
+
+* Understanding React Error Messages
+
+- the project is slightly altered from the previous section to have errors
+- the project failed to compile with this error
+
+#+begin_src
+./src/App.js
+SyntaxError: /home/buraiyen/Documents/React_Complete_Guide/S7-Debugging-Apps/react-complete-guide/src/App.js: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (43:6)
+
+  41 |         <CourseInput onAddGoal={addGoalHandler} />
+  42 |       </section>
+> 43 |       <section id="goals">
+     |       ^
+  44 |         {content}
+  45 |       </section>
+  46 |
+#+end_src
+
+- react is wanting us to wrap all elements in one surrounding element
