@@ -1,3 +1,4 @@
+import Button from '../UI/Button';
 import Card from '../UI/Card';
 import styles from './AddUser.module.css';
 
@@ -13,7 +14,7 @@ const AddUser = (props) => {
         <input type='text' id='username' />
         <label htmlFor='username'>Age (Years)</label>
         <input type='username' id='number' />
-        <button type='submit'>Add User</button>
+        <Button type='submit'>Add User</Button>
       </form>
     </Card>
   );
