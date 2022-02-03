@@ -47,3 +47,28 @@ export default Wrapper;
 #+end_src
 
 - this is basically an empty component
+
+* React Fragments
+
+- instead of using a custom wrapper, you can use these:
+
+
+#+begin_src js
+return (
+    <React.Fragment>
+        <h2>Hi</h2>
+        <p>This does not work</p>
+    </React.Fragment>
+)
+#+end_src
+
+#+begin_src js
+return (
+    <>
+        <h2>Hi</h2>
+        <p>This does not work</p>
+    </>
+)
+#+end_src
+
+- these are both empty wrapper components. The second option needs to be supported by your project
