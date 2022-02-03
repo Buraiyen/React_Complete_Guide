@@ -72,3 +72,15 @@ return (
 #+end_src
 
 - these are both empty wrapper components. The second option needs to be supported by your project
+
+* Portals
+** Introducting React Portals
+- portals are like fragments in which they help us write cleaner code
+
+[[./img-for-notes/img1.png]]
+
+- this works, but one thing that is not ideal is the modal is being rendered to the DOM. You have to keep in mind that a modal is the overlay to the entire page, so logically it needs to be higher than everything else
+- just because something works, doesn't mean it's good practice
+- below will be our goal with using portals
+
+[[./img-for-notes/img2.png]]
