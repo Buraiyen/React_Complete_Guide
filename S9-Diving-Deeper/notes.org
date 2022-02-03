@@ -1,0 +1,35 @@
+#+TITLE: Section 9 - Working with Fragments, Portals, and "Refs"
+
+* JSX Limitations and Workarounds
+
+** One Root Element
+
+- JSX doesn't allow more than one root element
+- this makes sense because you cannot return more than one item in regular JavaScript
+
+#+begin_src js
+return (
+    React.createElement('h2', {}, 'Hi there!');
+    React.createElement('p', {}, 'This does not work :(');
+)
+#+end_src
+
+- you can only have 1 createElement call
+- one workaround is wrapping a div or any other non-empty element
+- instead of elements, you can also use JavaScript array syntax. Each element inside of the array must be separated by commas
+  - but a gotcha of this is that React would want a key
+- a drawback of having <div> as a wrapper is that you can have "<div> soup"
+
+#+begin_src html
+<div>
+    <div>
+        <div>
+            <div>
+                <h1> hi </h1>
+            </div>
+        </div>
+    </div>
+</div>
+#+end_src
+
+- in larger apps, you can easily end up with tons of unnecessary divs
