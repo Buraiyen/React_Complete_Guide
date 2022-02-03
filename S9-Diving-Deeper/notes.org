@@ -33,3 +33,17 @@ return (
 #+end_src
 
 - in larger apps, you can easily end up with tons of unnecessary divs
+
+* Creating a Wrapper Component
+
+- we will create a wrapper component
+
+#+begin_src js
+const Wrapper = (props) => {
+  return props.children;
+};
+
+export default Wrapper;
+#+end_src
+
+- this is basically an empty component
