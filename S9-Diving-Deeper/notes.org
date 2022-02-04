@@ -201,3 +201,8 @@ const enteredUserAge = ageInputRef.current.value;
 - the downside is now we don't have our form clearing thing. We have an option in which you shouldn't really do, which is setting the two values to an empty string
 - in this situation, it's up to you on what you refer. Ref is less code, state is cleaner but more code
 - refs are more convenient to read user input
+
+* Controlled vs Uncontrolled Components
+
+- in our input, the value in them is not controlled by React. We are getting access to the value using the native DOM element
+- this is uncontrolled because we're not controlling the state of the input element with React
