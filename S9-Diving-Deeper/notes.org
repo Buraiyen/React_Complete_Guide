@@ -152,3 +152,52 @@ export default ErrorModal;
 #+end_src
 
 [[./img-for-notes/img3.png]]
+
+* Working with "ref"s (references)
+
+- *refs* allow us to access other DOM elements
+- in the user input form, updating the state with every keystroke is redundant
+- we will import the ~useRef~ function from react.
+  - it takes a default value and returns a value that allows us to work with the element which we will connect
+#+begin_src js
+// place these at the very top of your function
+const nameInputRef = useRef();
+const ageInputRef = useRef();
+#+end_src
+
+- inside of our input tags, we will use the ref
+
+  #+begin_src js
+  <input
+            type='text'
+            id='username'
+            value={enteredUsername}
+            onChange={usernameChangeHandler}
+            ref={nameInputRef}
+          />
+          <label htmlFor='username'>Age (Years)</label>
+          <input
+            type='number'
+            id='number'
+            value={enteredAge}
+            onChange={ageChangeHandler}
+            ref={ageInputRef}
+          />
+#+end_src
+
+- what's the benefit of using this? If we submit a user and console log the inputRef, we see this:
+
+  [[./img-for-notes/img4.png]]
+
+- the ~current~ prop holds the value that the ref is connected with, which is the DOM node, which you can manipulate with. It's recommended that you don't do it, but reading the data doesn't sound bad
+- now we can have access to the element without having to log every keystroke
+
+#+begin_src js
+const enteredName = nameInputRef.current.value;
+const enteredUserAge = ageInputRef.current.value;
+#+end_src
+
+- now we can get rid of our states
+- the downside is now we don't have our form clearing thing. We have an option in which you shouldn't really do, which is setting the two values to an empty string
+- in this situation, it's up to you on what you refer. Ref is less code, state is cleaner but more code
+- refs are more convenient to read user input
